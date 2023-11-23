@@ -137,7 +137,7 @@
       :key="o"
       style="margin-bottom: 8px; position: relative"
     >
-      <el-image fit="cover"  :src="image(o.cover)" class="image" @click="getArticleId(o.id)" />
+      <el-image fit="cover" :src="image(o.cover)" class="image" @click="getArticleId(o.id)" />
       <div style="padding: 14px; text-align: center">
         <el-link :underline="false" @click="getArticleId(o.id)">
           <span>{{ o.title }} </span>
@@ -182,11 +182,7 @@
                     <svg-icon icon-class="github"></svg-icon>
                   </div>
                 </a>
-                <a
-                  v-if="userBasic.qqNumber"
-                  :href=openQQ(userBasic.qqNumber)
-                  target="_blank"
-                >
+                <a v-if="userBasic.qqNumber" :href="openQQ(userBasic.qqNumber)" target="_blank">
                   <div class="diamond-clip-path diamond-icon">
                     <svg-icon icon-class="qq"></svg-icon>
                   </div>
@@ -246,7 +242,7 @@ import { ElMessage } from 'element-plus'
 import { article, listArticles, listTag, getComment, articleLike, deleteComment } from '@/api/show'
 import { addComment } from '@/api/user'
 import comments from '@/components/comments/index.vue'
-import {image, markdownImageFile, open, openQQ} from '@/utils/publicMethods'
+import { image, markdownImageFile, open, openQQ } from '@/utils/publicMethods'
 
 // 文章详情
 const articleOne = ref({})

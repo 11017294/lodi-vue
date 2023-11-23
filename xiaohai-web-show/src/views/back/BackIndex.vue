@@ -46,7 +46,7 @@ import { reactive, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import RightSide from '@/components/layouts/RightSide.vue'
 import { listBack } from '@/api/show'
-import {image} from "@/utils/publicMethods";
+import { image } from '@/utils/publicMethods'
 
 const router = useRouter()
 // 展示归档列表

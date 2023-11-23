@@ -28,12 +28,13 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref, toRefs} from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import RightSide from '@/components/layouts/RightSide.vue'
-import {listArticles, listCategory} from '@/api/show'
+import { listArticles, listCategory } from '@/api/show'
 import articleList from '@/components/articleList/index.vue'
 import useStore from '@/store/index'
+
 const store = useStore()
 
 // 分类列表
@@ -54,7 +55,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     type: 6,
-    id:0
+    id: 0
   }
 })
 
@@ -68,7 +69,7 @@ function cancelClick(category: any) {
 }
 
 /** 查询展示文章列表 */
-function getList(val:any) {
+function getList(val: any) {
   queryParams.value.id = val
   queryParams.value.pageNum = 1
   queryParams.value.pageSize = 10

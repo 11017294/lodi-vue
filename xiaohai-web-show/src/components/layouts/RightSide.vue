@@ -25,11 +25,7 @@
                   <svg-icon icon-class="github"></svg-icon>
                 </div>
               </a>
-              <a
-                v-if="showBasic.qqNumber"
-                :href=openQQ(showBasic.qqNumber)
-                target="_blank"
-              >
+              <a v-if="showBasic.qqNumber" :href="openQQ(showBasic.qqNumber)" target="_blank">
                 <div class="diamond-clip-path diamond-icon">
                   <svg-icon icon-class="qq"></svg-icon>
                 </div>
@@ -146,7 +142,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import {getArticle, image, open, openQQ} from '@/utils/publicMethods'
+import { getArticle, image, open, openQQ } from '@/utils/publicMethods'
 import useStore from '@/store/index'
 
 const store = useStore()

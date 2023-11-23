@@ -4,9 +4,9 @@ const faceList = [`${raw}/emoji/smile.webp`, `${raw}/emoji/tv/tv.webp`]
 
 export const emojiList: {}[] = [
   {
-    label:'first',
-    img:`${raw}/emoji/smile.webp`,
-    childrens:{
+    label: 'first',
+    img: `${raw}/emoji/smile.webp`,
+    childrens: {
       '[口罩]': `${raw}/emoji/kouzhao.webp`,
       '[狗头]': `${raw}/emoji/goutou.webp`,
       '[微笑]': `${raw}/emoji/smile.webp`,
@@ -80,7 +80,7 @@ export const emojiList: {}[] = [
     }
   },
   {
-    label:'second',
+    label: 'second',
     img: `${raw}/emoji/tv/tv.webp`,
     childrens: {
       '[tv_doge]': `${raw}/emoji/tv/doge.webp`,
@@ -139,8 +139,8 @@ export const emojiList: {}[] = [
 // 把emojiList数组中的每一个对象，放到emojiMap中方便取用
 export function allEmoji(): {} {
   let emojiMap = {}
-  emojiList.map((emojis)=>{
-      emojiMap = { ...emojiMap, ...(emojis as any).childrens }
+  emojiList.map((emojis) => {
+    emojiMap = { ...emojiMap, ...(emojis as any).childrens }
   })
   return emojiMap
 }

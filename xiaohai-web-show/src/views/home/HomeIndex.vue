@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, toRefs } from 'vue'
 import RightSide from '@/components/layouts/RightSide.vue'
-import {listArticles, listCategory} from '@/api/show'
+import { listArticles, listCategory } from '@/api/show'
 
 import articleList from '@/components/articleList/index.vue'
 import { getArticle, image } from '@/utils/publicMethods'
@@ -27,7 +27,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     type: 1,
-    id:null
+    id: null
   }
 })
 
@@ -47,7 +47,7 @@ function getCarouselList() {
 }
 
 /** 查询展示文章列表 */
-function getList(val: any, id:any) {
+function getList(val: any, id: any) {
   queryParams.value.type = val
   queryParams.value.id = id
   queryParams.value.pageNum = 1
@@ -58,7 +58,7 @@ function getList(val: any, id:any) {
     const a = Math.ceil(total.value / queryParams.value.pageSize)
     loadMores.value = queryParams.value.pageNum + 1 <= a
   })
-  selectedButton.value=id
+  selectedButton.value = id
 }
 
 /**
@@ -76,8 +76,8 @@ function loadMore() {
     })
   }
 }
-function classification(){
-  classify.value = !classify.value;
+function classification() {
+  classify.value = !classify.value
 }
 /**
  * 分类
@@ -89,7 +89,7 @@ function getCategory() {
 }
 
 getCategory()
-getList(1,null)
+getList(1, null)
 getCarouselList()
 </script>
 
@@ -115,24 +115,43 @@ getCarouselList()
 
       <el-card class="box-card" shadow="hover" :body-style="{ padding: '10px' }">
         <div class="card-header category" v-if="!classify">
-          <el-space wrap  size="default" >
-            <el-button style="border-radius: 10px;" :class="{'selected': null === selectedButton}" @click="getList(1,null)">全部</el-button>
-            <el-button style="border-radius: 10px;"  v-for="category in categories"  :class="{'selected': category.id === selectedButton}"  @click="getList(6,category.id)">
+          <el-space wrap size="default">
+            <el-button
+              style="border-radius: 10px"
+              :class="{ selected: null === selectedButton }"
+              @click="getList(1, null)"
+              >全部</el-button
+            >
+            <el-button
+              style="border-radius: 10px"
+              v-for="category in categories"
+              :class="{ selected: category.id === selectedButton }"
+              @click="getList(6, category.id)"
+            >
               {{ category.name }}
               <div class="tags">{{ category.count }}</div>
             </el-button>
           </el-space>
-          <svg-icon icon-class="spread"   class="iconUnfold" @click="classification"></svg-icon>
+          <svg-icon icon-class="spread" class="iconUnfold" @click="classification"></svg-icon>
         </div>
         <div class="card-header" v-else>
-          <el-space wrap size="default"  >
-            <el-button style="border-radius: 10px;" :class="{'selected': null === selectedButton}" @click="getList(1,null)">全部</el-button>
-            <el-button style="border-radius: 10px;"  v-for="category in categories" @click="getList(6,category.id)">
+          <el-space wrap size="default">
+            <el-button
+              style="border-radius: 10px"
+              :class="{ selected: null === selectedButton }"
+              @click="getList(1, null)"
+              >全部</el-button
+            >
+            <el-button
+              style="border-radius: 10px"
+              v-for="category in categories"
+              @click="getList(6, category.id)"
+            >
               {{ category.name }}
               <div class="tags">{{ category.count }}</div>
             </el-button>
           </el-space>
-          <svg-icon icon-class="pack-up"  class="iconUnfold" @click="classification"></svg-icon>
+          <svg-icon icon-class="pack-up" class="iconUnfold" @click="classification"></svg-icon>
         </div>
       </el-card>
       <articleList :dataList="dataList"></articleList>
@@ -153,19 +172,38 @@ getCarouselList()
 
     <el-card class="box-card" shadow="hover" :body-style="{ padding: '10px' }">
       <div class="card-header category" v-if="!classify">
-        <el-space wrap  size="default" >
-          <el-button style="border-radius: 10px;" :class="{'selected': null === selectedButton}" @click="getList(1,null)">全部</el-button>
-          <el-button style="border-radius: 10px;"  v-for="category in categories"  :class="{'selected': category.id === selectedButton}"  @click="getList(6,category.id)">
+        <el-space wrap size="default">
+          <el-button
+            style="border-radius: 10px"
+            :class="{ selected: null === selectedButton }"
+            @click="getList(1, null)"
+            >全部</el-button
+          >
+          <el-button
+            style="border-radius: 10px"
+            v-for="category in categories"
+            :class="{ selected: category.id === selectedButton }"
+            @click="getList(6, category.id)"
+          >
             {{ category.name }}
             <div class="tags">{{ category.count }}</div>
           </el-button>
         </el-space>
-        <svg-icon icon-class="spread"  class="iconUnfold" @click="classification"></svg-icon>
+        <svg-icon icon-class="spread" class="iconUnfold" @click="classification"></svg-icon>
       </div>
       <div class="card-header" v-else>
-        <el-space wrap size="default"  >
-          <el-button style="border-radius: 10px;" :class="{'selected': null === selectedButton}" @click="getList(1,null)">全部</el-button>
-          <el-button style="border-radius: 10px;"  v-for="category in categories" @click="getList(6,category.id)">
+        <el-space wrap size="default">
+          <el-button
+            style="border-radius: 10px"
+            :class="{ selected: null === selectedButton }"
+            @click="getList(1, null)"
+            >全部</el-button
+          >
+          <el-button
+            style="border-radius: 10px"
+            v-for="category in categories"
+            @click="getList(6, category.id)"
+          >
             {{ category.name }}
             <div class="tags">{{ category.count }}</div>
           </el-button>
@@ -221,7 +259,7 @@ getCarouselList()
   background-color: var(--el-button-hover-bg-color);
   outline: none;
 }
-.iconUnfold{
+.iconUnfold {
   padding-top: 10px;
 }
 .iconUnfold:hover {

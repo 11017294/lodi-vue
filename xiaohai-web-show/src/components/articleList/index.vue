@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, reactive, toRefs } from 'vue'
-import { listArticles, articleLike } from '@/api/show'
+import { ref, watch, toRefs } from 'vue'
+import { articleLike } from '@/api/show'
 import { getArticle, image } from '@/utils/publicMethods'
 import useStore from '@/store/index'
 
@@ -34,10 +34,10 @@ function clickLike(val: any) {
           dataList.value[i].clickLike = dataList.value[i].clickLike === 1 ? 0 : 1
           if (dataList.value[i].clickLike === 1) {
             // 点赞
-            dataList.value[i].likeCount += 1
+            dataList.value[i].upvoteCount += 1
           } else {
             // 取消点赞
-            dataList.value[i].likeCount -= 1
+            dataList.value[i].upvoteCount -= 1
           }
         }
       }
@@ -138,8 +138,11 @@ watch(
 
             <el-space alignment="center" size="large">
               <span class="text-xs font-number text-color">
-                <svg-icon icon-class="eye-light" style="font-size: 15px" /> {{ article.pageView }}
+                <svg-icon icon-class="eye-light" style="font-size: 15px" /> {{ article.clickCount }}
               </span>
+              <span class="text-xs font-number text-color">
+                <svg-icon icon-class="收藏" /> {{ article.collectCount }}</span
+              >
               <span class="text-xs font-number text-color"
                 ><svg-icon icon-class="message" style="font-size: 15px" />
                 {{ article.commentCount }}</span
@@ -150,7 +153,7 @@ watch(
                   style="font-size: 15px; cursor: pointer"
                   :style="{ color: article.clickLike == 1 ? '#fd5a5a' : '' }"
                 />
-                {{ article.likeCount }}</span
+                {{ article.upvoteCount }}</span
               >
             </el-space>
           </span>
@@ -214,7 +217,7 @@ watch(
                 style="font-size: 15px; cursor: pointer"
                 :style="{ color: article.clickLike === 1 ? '#fd5a5a' : '' }"
               />
-              {{ article.likeCount }}
+              {{ article.upvoteCount }}
             </span>
           </span>
         </div>

@@ -125,17 +125,16 @@ DotCode(点码），是一个前后分离的博客系统。
 ## 网站截图
 
 ### web
-
-|                     web                      |                     web                     |
-|:--------------------------------------------:|:-------------------------------------------:|
-| ![image text](./doc/image/web/register.png)  |  ![image text](./doc/image/web/login.png)   |
-| ![image text](./doc/image/web/dashboard.png) | ![image text](./doc/image/web/article.png)  |
-|   ![image text](./doc/image/web/edit.png)    |   ![image text](./doc/image/web/tags.png)   |
-| ![image text](./doc/image/web/category.png)  | ![image text](./doc/image/web/comment.png)  |
-|   ![image text](./doc/image/web/user.png)    |   ![image text](./doc/image/web/role.png)   |
-|   ![image text](./doc/image/web/menu.png)    | ![image text](./doc/image/web/dictType.png) |
-| ![image text](./doc/image/web/dictData.png)  |   ![image text](./doc/image/web/log.png)    |
-| ![image text](./doc/image/web/log-view.png)  |  ![image text](./doc/image/web/online.png)  |
+|                                           web                                            |                     web                     |
+|:----------------------------------------------------------------------------------------:|:-------------------------------------------:|
+| ![image text](https://gitee.com/wch2019/xiaohai-blog/raw/dev/doc/image/web/register.png) |  ![image text](./doc/image/web/login.png)   |
+|                       ![image text](./doc/image/web/dashboard.png)                       | ![image text](./doc/image/web/article.png)  |
+|                         ![image text](./doc/image/web/edit.png)                          |   ![image text](./doc/image/web/tags.png)   |
+|                       ![image text](./doc/image/web/category.png)                        | ![image text](./doc/image/web/comment.png)  |
+|                         ![image text](./doc/image/web/user.png)                          |   ![image text](./doc/image/web/role.png)   |
+|                         ![image text](./doc/image/web/menu.png)                          | ![image text](./doc/image/web/dictType.png) |
+|                       ![image text](./doc/image/web/dictData.png)                        |   ![image text](./doc/image/web/log.png)    |
+|                       ![image text](./doc/image/web/log-view.png)                        |  ![image text](./doc/image/web/online.png)  |
 
 ### web-show
 

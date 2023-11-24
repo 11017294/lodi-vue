@@ -108,17 +108,17 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column label="浏览量" align="center" prop="pageView">
+      <el-table-column label="浏览量" align="center" prop="clickCount">
         <template slot-scope="scope">
-          <el-tag type="warning"> {{ scope.row.pageView }}</el-tag>
+          <el-tag type="warning"> {{ scope.row.clickCount }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="点赞量" align="center" prop="likeCount">
+      <el-table-column label="点赞量" align="center" prop="upvoteCount">
         <template slot-scope="scope">
-          <el-tag type="danger"> {{ scope.row.likeCount }}</el-tag>
+          <el-tag type="danger"> {{ scope.row.upvoteCount }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="写作时间" align="center" prop="createdTime" />
+      <el-table-column label="写作时间" align="center" prop="createTime" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

@@ -1,6 +1,8 @@
 import { ElMessageBox } from 'element-plus'
 import router from '@/router'
 
+const service = '/lodi-admin'
+
 /**
  * 图片地址拼接
  * @param cover

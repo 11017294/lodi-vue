@@ -99,7 +99,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作人" align="center" prop="createdBy" width="180" />
-      <el-table-column label="创建时间" align="center" prop="createdTime" width="180" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

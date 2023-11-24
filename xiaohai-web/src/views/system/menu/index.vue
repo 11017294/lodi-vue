@@ -84,7 +84,7 @@
           <dict-tag :options="$store.getters.dict.sys_normal_disable" :value="scope.row.status" width="180" />
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createdTime" />
+      <el-table-column label="创建时间" align="center" prop="createTime" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

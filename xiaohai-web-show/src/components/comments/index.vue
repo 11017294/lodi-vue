@@ -21,7 +21,7 @@
       <div class="dataListRight">
         <div class="title">
           <h4>{{ item.username }}</h4>
-          <span class="text-sm font-number text-color"> {{ item.createdTime }}</span>
+          <span class="text-sm font-number text-color"> {{ item.createTime }}</span>
         </div>
         <div class="content">
           <p v-html="parseEmojis(item.content)"></p>
@@ -50,7 +50,7 @@
             <div class="titleChild">
               <div class="title">
                 <h4>{{ i.username }}</h4>
-                <span class="text-sm font-number text-color"> {{ i.createdTime }}</span>
+                <span class="text-sm font-number text-color"> {{ i.createTime }}</span>
               </div>
             </div>
             <div class="content">

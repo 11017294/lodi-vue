@@ -6,31 +6,35 @@
       <h1 class="flex-center">{{ articleOne.title }}</h1>
       <span style="display: flex; align-items: center; justify-content: space-between">
         <span style="display: flex; align-items: center">
-          <el-space size="default">
-            <el-avatar v-if="userBasic.avatar" size="default" :src="image(userBasic.avatar)" />
-            <span class="text-sm">{{ userBasic.username }}</span>
-            <el-tag size="default">{{ articleOne.categoryName }}</el-tag>
-            <template v-for="(item, index) in tags">
-              <el-tag
-                v-if="articleOne.tags && articleOne.tags.includes(item.id)"
-                :key="index"
-                style="margin-right: 4px"
-                type="success"
-                size="default"
-                :label="index"
-                border
-                >{{ item.name }}
-              </el-tag>
-            </template>
-          </el-space>
+<!--          <el-space size="default">-->
+<!--            <el-avatar v-if="userBasic.avatar" size="default" :src="image(userBasic.avatar)" />-->
+<!--            <span class="text-sm">{{ userBasic.username }}</span>-->
+<!--            <el-tag size="default">{{ articleOne.categoryName }}</el-tag>-->
+<!--            <template v-for="(item, index) in tags">-->
+<!--              <el-tag-->
+<!--                v-if="articleOne.tags && articleOne.tags.includes(item.id)"-->
+<!--                :key="index"-->
+<!--                style="margin-right: 4px"-->
+<!--                type="success"-->
+<!--                size="default"-->
+<!--                :label="index"-->
+<!--                border-->
+<!--                >{{ item.name }}-->
+<!--              </el-tag>-->
+<!--            </template>-->
+<!--          </el-space>-->
         </span>
         <el-space alignment="center" size="large">
           <span class="text-sm font-number text-color">
-            <svg-icon icon-class="time-light" />{{ articleOne.createdTime }}</span
+            <svg-icon icon-class="time-light" />{{ articleOne.createTime }}</span
           >
           <span class="text-sm font-number text-color">
-            <svg-icon icon-class="eye-light" style="font-size: 15px" /> {{ articleOne.pageView }}
+            <svg-icon icon-class="eye-light" style="font-size: 15px" /> {{ articleOne.clickCount }}
           </span>
+          <span class="text-sm font-number text-color">
+            <svg-icon icon-class="收藏" style="font-size: 15px" />
+            {{ articleOne.collectCount }}</span
+          >
           <span class="text-sm font-number text-color">
             <svg-icon icon-class="message" style="font-size: 15px" /> {{ commentCount }}
           </span>
@@ -40,7 +44,7 @@
               style="font-size: 15px; cursor: pointer"
               :style="{ color: articleOne.clickLike == 1 ? '#fd5a5a' : '' }"
             />
-            {{ articleOne.likeCount }}
+            {{ articleOne.upvoteCount }}
           </span>
         </el-space>
       </span>
@@ -49,7 +53,7 @@
         原创 本文DotCode原创文章，转载无需和我联系，但请注明来自本站<br />
       </div>
       <div v-else class="tip">转载 本文转载自{{ articleOne.originalUrl }}<br /></div>
-      <v-md-preview :text="articleOne.text" ref="preview"></v-md-preview>
+      <v-md-preview :text="articleOne.content" ref="preview"></v-md-preview>
       <hr class="divider" />
       <h3 class="flex-center">推荐</h3>
       <el-row style="justify-content: center">
@@ -95,19 +99,22 @@
     <span
       style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap"
     >
-      <span style="display: flex; align-items: center">
-        <el-space size="default">
-          <el-avatar v-if="userBasic.avatar" size="small" :src="image(userBasic.avatar)" />
-          <span class="text-sm">{{ userBasic.username }}</span>
-        </el-space>
-      </span>
+<!--      <span style="display: flex; align-items: center">-->
+<!--        <el-space size="default">-->
+<!--          <el-avatar v-if="userBasic.avatar" size="small" :src="image(userBasic.avatar)" />-->
+<!--          <span class="text-sm">{{ userBasic.username }}</span>-->
+<!--        </el-space>-->
+<!--      </span>-->
       <el-space alignment="center" size="small">
-        <span class="text-xs font-number text-color" v-if="articleOne.createdTime">
-          <svg-icon icon-class="time-light" /> {{ articleOne.createdTime.split(' ')[0] }}</span
+        <span class="text-xs font-number text-color" v-if="articleOne.createTime">
+          <svg-icon icon-class="time-light" /> {{ articleOne.createTime.split(' ')[0] }}</span
         >
         <span class="text-xs font-number text-color">
-          <svg-icon icon-class="eye-light" /> {{ articleOne.pageView }}
+          <svg-icon icon-class="eye-light" /> {{ articleOne.clickCount }}
         </span>
+        <span class="text-xs font-number text-color">
+          <svg-icon icon-class="收藏" /> {{ articleOne.collectCount }}</span
+        >
         <span class="text-xs font-number text-color"
           ><svg-icon icon-class="message" /> {{ commentCount }}</span
         >
@@ -117,7 +124,7 @@
             style="font-size: 15px; cursor: pointer"
             :style="{ color: articleOne.clickLike == 1 ? '#fd5a5a' : '' }"
           />
-          {{ articleOne.likeCount }}</span
+          {{ articleOne.upvoteCount }}</span
         >
       </el-space>
     </span>
@@ -127,7 +134,8 @@
       原创 本文DotCode原创文章，转载无需和我联系，但请注明来自本站<br />
     </div>
     <div v-else class="tip">转载 本文转载自{{ articleOne.originalUrl }}<br /></div>
-    <v-md-preview :text="articleOne.text"></v-md-preview>
+    {{articleOne.content}}
+    <v-md-preview :text="articleOne.content"></v-md-preview>
 
     <hr class="divider" />
     <h3 class="flex-center">推荐</h3>
@@ -236,10 +244,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRefs, watch, onBeforeMount } from 'vue'
+import { onBeforeMount, reactive, ref, toRefs, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { article, listArticles, listTag, getComment, articleLike, deleteComment } from '@/api/show'
+import { article, articleLike, deleteComment, getComment, listArticles, listTag } from '@/api/show'
 import { addComment } from '@/api/user'
 import comments from '@/components/comments/index.vue'
 import { image, markdownImageFile, open, openQQ } from '@/utils/publicMethods'
@@ -298,14 +306,15 @@ function clickLike(val: any) {
       ;(articleOne.value as any).clickLike = (articleOne.value as any).clickLike === 1 ? 0 : 1
       if ((articleOne.value as any).clickLike === 1) {
         // 点赞
-        ;(articleOne.value as any).likeCount += 1
+        ;(articleOne.value as any).upvoteCount += 1
       } else {
         // 取消点赞
-        ;(articleOne.value as any).likeCount -= 1
+        ;(articleOne.value as any).upvoteCount -= 1
       }
     }
   })
 }
+
 // 获取文章详情
 const getArticle = async () => {
   await article(route.params.id).then((res: any) => {
@@ -372,6 +381,7 @@ function getListComment() {
     config.value.disabled = true
   })
 }
+
 function submitComments(val: any) {
   const data: any = {
     parentId: val.parentId,
@@ -383,12 +393,14 @@ function submitComments(val: any) {
     ElMessage.success(res.data.msg)
   })
 }
+
 function vanishDelete(val: any) {
   deleteComment(val.id).then((res) => {
     getListComment()
     ElMessage.success(res.data.msg)
   })
 }
+
 onBeforeMount(async () => {
   // 监听$route对象上的参数属性变化
   watch(

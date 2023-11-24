@@ -7,7 +7,7 @@
         <el-timeline-item
           v-for="article in dataList"
           :key="article"
-          :timestamp="article.createdTime.split(' ')[0]"
+          :timestamp="article.createTime.split(' ')[0]"
           placement="top"
         >
           <el-card class="box-card">

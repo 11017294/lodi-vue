@@ -95,7 +95,7 @@
           <dict-tag :options="$store.getters.dict.sys_check_state" :value="scope.row.status" />
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createdTime" />
+      <el-table-column label="创建时间" align="center" prop="createTime" />
       <el-table-column v-if="$store.getters.roles.includes('admin')" label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

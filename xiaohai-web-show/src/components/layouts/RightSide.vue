@@ -90,8 +90,8 @@
               {{ article.title }}
             </span>
           </el-link>
-          <span class="text-xs font-number text-color" v-if="article.createdTime">
-            {{ article.createdTime.split(' ')[0] }}
+          <span class="text-xs font-number text-color" v-if="article.createTime">
+            {{ article.createTime.split(' ')[0] }}
           </span>
         </div>
         <el-image

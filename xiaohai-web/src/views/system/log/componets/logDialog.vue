@@ -5,7 +5,7 @@
       <el-descriptions :column="3" border>
         <el-descriptions-item label="模块名称">{{ form.title }}</el-descriptions-item>
         <el-descriptions-item label="操作人">{{ form.createdBy }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间">{{ form.createdTime }}</el-descriptions-item>
+        <el-descriptions-item label="创建时间">{{ form.createTime }}</el-descriptions-item>
         <el-descriptions-item label="状态">
           <el-tag v-if="form.status==1" type="danger">异常</el-tag>
           <el-tag v-if="form.status==0" type="success">正常</el-tag>

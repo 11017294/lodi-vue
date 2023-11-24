@@ -1,6 +1,7 @@
 import request from '@/utils/axios'
 
-const api = '/home/show'
+const service = '/lodi-admin'
+const api = '/article'
 const comment = '/note'
 
 // 标签
@@ -20,7 +21,7 @@ export const listCategory = () => {
 // 查询展示文章表列表数据
 export const listArticles = (query: any) => {
   return request({
-    url: `${api}/articles`,
+    url: `${service}/article/page`,
     method: 'get',
     params: query
   })
@@ -40,7 +41,7 @@ export const hotArticles = () => {
 // 文章详情
 export const article = (id: any) => {
   return request({
-    url: `${api}/article/${id}`,
+    url: `${service}/article/${id}`,
     method: 'get'
   })
 }

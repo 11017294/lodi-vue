@@ -16,7 +16,7 @@
             <el-tag size="default">{{ articleOne.categoryName }}</el-tag>
             <template v-for="(item, index) in tags">
               <el-tag
-                v-if="articleOne.tags && articleOne.tags.includes(item.id)"
+                v-if="articleOne.tagsId && articleOne.tagsId.includes(item.id)"
                 :key="index"
                 style="margin-right: 4px"
                 type="success"
@@ -88,7 +88,7 @@
       <el-tag size="small">{{ articleOne.categoryName }}</el-tag>
       <template v-for="(item, index) in tags">
         <el-tag
-          v-if="articleOne.tags && articleOne.tags.includes(item.id)"
+          v-if="articleOne.tagsId && articleOne.tagsId.includes(item.id)"
           :key="index"
           style="margin-right: 4px"
           type="success"
@@ -138,7 +138,6 @@
       原创 本文DotCode原创文章，转载无需和我联系，但请注明来自本站<br />
     </div>
     <div v-else class="tip">转载 本文转载自{{ articleOne.originalUrl }}<br /></div>
-    {{articleOne.content}}
     <v-md-preview :text="articleOne.content"></v-md-preview>
 
     <hr class="divider" />

@@ -6,23 +6,27 @@
       <h1 class="flex-center">{{ articleOne.title }}</h1>
       <span style="display: flex; align-items: center; justify-content: space-between">
         <span style="display: flex; align-items: center">
-<!--          <el-space size="default">-->
-<!--            <el-avatar v-if="userBasic.avatar" size="default" :src="image(userBasic.avatar)" />-->
-<!--            <span class="text-sm">{{ userBasic.username }}</span>-->
-<!--            <el-tag size="default">{{ articleOne.categoryName }}</el-tag>-->
-<!--            <template v-for="(item, index) in tags">-->
-<!--              <el-tag-->
-<!--                v-if="articleOne.tags && articleOne.tags.includes(item.id)"-->
-<!--                :key="index"-->
-<!--                style="margin-right: 4px"-->
-<!--                type="success"-->
-<!--                size="default"-->
-<!--                :label="index"-->
-<!--                border-->
-<!--                >{{ item.name }}-->
-<!--              </el-tag>-->
-<!--            </template>-->
-<!--          </el-space>-->
+          <el-space size="default">
+            <el-avatar
+              v-if="articleOne.userAvatar"
+              size="default"
+              :src="image(articleOne.userAvatar)"
+            />
+            <span class="text-sm">{{ articleOne.username }}</span>
+            <el-tag size="default">{{ articleOne.categoryName }}</el-tag>
+            <template v-for="(item, index) in tags">
+              <el-tag
+                v-if="articleOne.tags && articleOne.tags.includes(item.id)"
+                :key="index"
+                style="margin-right: 4px"
+                type="success"
+                size="default"
+                :label="index"
+                border
+                >{{ item.name }}
+              </el-tag>
+            </template>
+          </el-space>
         </span>
         <el-space alignment="center" size="large">
           <span class="text-sm font-number text-color">
@@ -99,12 +103,12 @@
     <span
       style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap"
     >
-<!--      <span style="display: flex; align-items: center">-->
-<!--        <el-space size="default">-->
-<!--          <el-avatar v-if="userBasic.avatar" size="small" :src="image(userBasic.avatar)" />-->
-<!--          <span class="text-sm">{{ userBasic.username }}</span>-->
-<!--        </el-space>-->
-<!--      </span>-->
+      <span style="display: flex; align-items: center">
+        <el-space size="default">
+          <el-avatar v-if="articleOne.userAvatar" size="small" :src="image(articleOne.userAvatar)" />
+          <span class="text-sm">{{ articleOne.username }}</span>
+        </el-space>
+      </span>
       <el-space alignment="center" size="small">
         <span class="text-xs font-number text-color" v-if="articleOne.createTime">
           <svg-icon icon-class="time-light" /> {{ articleOne.createTime.split(' ')[0] }}</span
@@ -269,7 +273,7 @@ const commentCount = ref([])
 
 const data = reactive({
   queryParams: {
-    pageNum: 1,
+    currentPage: 1,
     pageSize: 3,
     type: 6,
     id: 0

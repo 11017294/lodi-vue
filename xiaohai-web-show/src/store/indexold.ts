@@ -34,8 +34,8 @@ export default createStore({
             if (data == null) {
               return reject('验证失败，请重新登录。')
             }
-            const { nickName, avatar, id } = data.info
-            defaultState.name = nickName
+            const { nickname, avatar, id } = data.info
+            defaultState.name = nickname
             defaultState.avatar = import.meta.env.VITE_APP_BASE_API_FILE + avatar
             defaultState.userId = id
             resolve(data)

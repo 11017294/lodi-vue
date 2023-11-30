@@ -24,7 +24,7 @@ const selectedButton = ref(null)
 
 const data = reactive({
   queryParams: {
-    pageNum: 1,
+    currentPage: 1,
     pageSize: 10,
     type: 1,
     id: null
@@ -39,7 +39,7 @@ const { queryParams } = toRefs(data)
  */
 function getCarouselList() {
   queryParams.value.type = 2
-  queryParams.value.pageNum = 1
+  queryParams.value.currentPage = 1
   queryParams.value.pageSize = 3
   listArticles(queryParams.value).then((response) => {
     carouselList.value = response.data.data.records
@@ -50,13 +50,13 @@ function getCarouselList() {
 function getList(val: any, id: any) {
   queryParams.value.type = val
   queryParams.value.id = id
-  queryParams.value.pageNum = 1
+  queryParams.value.currentPage = 1
   queryParams.value.pageSize = 10
   listArticles(queryParams.value).then((response) => {
     dataList.value = response.data.data.records
     total.value = response.data.data.total
     const a = Math.ceil(total.value / queryParams.value.pageSize)
-    loadMores.value = queryParams.value.pageNum + 1 <= a
+    loadMores.value = queryParams.value.currentPage + 1 <= a
   })
   selectedButton.value = id
 }
@@ -66,11 +66,11 @@ function getList(val: any, id: any) {
  */
 function loadMore() {
   const a = Math.ceil(total.value / queryParams.value.pageSize)
-  if (queryParams.value.pageNum + 1 >= a) {
+  if (queryParams.value.currentPage + 1 >= a) {
     loadMores.value = false
   }
-  if (queryParams.value.pageNum + 1 <= a) {
-    queryParams.value.pageNum = 1 + queryParams.value.pageNum
+  if (queryParams.value.currentPage + 1 <= a) {
+    queryParams.value.currentPage = 1 + queryParams.value.currentPage
     listArticles(queryParams.value).then((response) => {
       dataList.value = [...dataList.value, ...response.data.data.records]
     })
@@ -129,7 +129,7 @@ getCarouselList()
               @click="getList(6, category.id)"
             >
               {{ category.name }}
-              <div class="tags">{{ category.count }}</div>
+              <div class="tags">{{ category.clickCount }}</div>
             </el-button>
           </el-space>
           <svg-icon icon-class="spread" class="iconUnfold" @click="classification"></svg-icon>
@@ -148,7 +148,7 @@ getCarouselList()
               @click="getList(6, category.id)"
             >
               {{ category.name }}
-              <div class="tags">{{ category.count }}</div>
+              <div class="tags">{{ category.clickCount }}</div>
             </el-button>
           </el-space>
           <svg-icon icon-class="pack-up" class="iconUnfold" @click="classification"></svg-icon>
@@ -186,7 +186,7 @@ getCarouselList()
             @click="getList(6, category.id)"
           >
             {{ category.name }}
-            <div class="tags">{{ category.count }}</div>
+            <div class="tags">{{ category.clickCount }}</div>
           </el-button>
         </el-space>
         <svg-icon icon-class="spread" class="iconUnfold" @click="classification"></svg-icon>
@@ -205,7 +205,7 @@ getCarouselList()
             @click="getList(6, category.id)"
           >
             {{ category.name }}
-            <div class="tags">{{ category.count }}</div>
+            <div class="tags">{{ category.clickCount }}</div>
           </el-button>
         </el-space>
         <svg-icon icon-class="pack-up" class="iconUnfold" @click="classification"></svg-icon>

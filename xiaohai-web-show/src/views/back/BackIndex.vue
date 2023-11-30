@@ -18,7 +18,7 @@
             <span style="display: flex; align-items: center; flex-direction: row-reverse">
               <el-space size="small">
                 <el-avatar size="small" :src="image(article.avatar)" />
-                <span v-if="article.nickName" class="text-xs">{{ article.nickName }}</span>
+                <span v-if="article.nickname" class="text-xs">{{ article.nickname }}</span>
                 <span v-else class="text-xs">{{ article.username }}</span>
               </el-space>
             </span>

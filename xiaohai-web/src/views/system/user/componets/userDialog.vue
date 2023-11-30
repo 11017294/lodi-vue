@@ -36,8 +36,8 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="用户昵称" prop="nickName">
-            <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
+          <el-form-item label="用户昵称" prop="nickname">
+            <el-input v-model="form.nickname" placeholder="请输入用户昵称" maxlength="30" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -93,7 +93,7 @@ export default {
         email: '',
         roleIds: [],
         status: '0',
-        nickName: '',
+        nickname: '',
         gender: ''
       },
       // 角色选择框列表
@@ -115,7 +115,7 @@ export default {
         email: '',
         roleIds: [],
         status: '0',
-        nickName: '',
+        nickname: '',
         gender: ''
       }
     },

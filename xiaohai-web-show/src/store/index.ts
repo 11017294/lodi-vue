@@ -35,9 +35,9 @@ const useStore = defineStore('user', {
             if (data == null) {
               return reject('验证失败，请重新登录。')
             }
-            const { username, nickName, avatar, id, summary, gitee, github, qqNumber, weChat } =
+            const { username, nickname, avatar, id, summary, gitee, github, qqNumber, weChat } =
               data.info
-            this.name = nickName || username
+            this.name = nickname || username
             this.avatar = import.meta.env.VITE_APP_BASE_API_FILE + avatar
             this.userId = id
             this.summary = summary

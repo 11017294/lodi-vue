@@ -11,9 +11,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="用户昵称" prop="nickName">
+      <el-form-item label="用户昵称" prop="nickname">
         <el-input
-          v-model="queryParams.nickName"
+          v-model="queryParams.nickname"
           placeholder="请输入用户昵称"
           clearable
           size="small"
@@ -87,11 +87,11 @@
       <el-table-column label="头像" align="center" width="120" prop="avatar">
         <template slot-scope="scope">
           <el-avatar v-if="scope.row.avatar" shape="square" :src="image(scope.row)" />
-          <el-avatar v-else shape="square"> {{ scope.row.nickName }} </el-avatar>
+          <el-avatar v-else shape="square"> {{ scope.row.nickname }} </el-avatar>
         </template>
       </el-table-column>
       <el-table-column label="用户名" align="center" prop="username" :show-overflow-tooltip="true" />
-      <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" />
+      <el-table-column label="用户昵称" align="center" prop="nickname" :show-overflow-tooltip="true" />
       <el-table-column label="用户性别" align="center" prop="gender">
         <template slot-scope="scope">
           <dict-tag :options="$store.getters.dict.sys_user_sex" :value="scope.row.gender" />
@@ -182,7 +182,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         username: null,
-        nickName: null,
+        nickname: null,
         status: null
       }
     }

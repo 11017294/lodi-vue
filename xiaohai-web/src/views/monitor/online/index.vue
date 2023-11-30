@@ -11,7 +11,7 @@
       :data="onLineUserList"
     >
       <el-table-column label="用户名" align="center" prop="username" />
-      <el-table-column label="用户昵称" align="center" prop="nickName" />
+      <el-table-column label="用户昵称" align="center" prop="nickname" />
       <el-table-column label="登录ip" align="center" prop="loginIp" />
       <el-table-column label="ip来源" align="center" prop="loginSource" />
       <el-table-column label="浏览器" align="center" prop="loginBrowser" />

@@ -1,27 +1,26 @@
 import request from '@/utils/axios'
 
-const service = '/lodi-admin'
-const api = '/article'
+const api = '/index'
 const comment = '/note'
 
 // 标签
 export const listTag = () => {
   return request({
-    url: `${api}/tags`,
+    url: '/tags/getTagList',
     method: 'get'
   })
 }
 // 分类
 export const listCategory = () => {
   return request({
-    url: `${api}/category`,
+    url: '/category/getCategoryList',
     method: 'get'
   })
 }
 // 查询展示文章表列表数据
 export const listArticles = (query: any) => {
   return request({
-    url: `${service}/article/page`,
+    url: `${api}/getRecommendedArticle`,
     method: 'get',
     params: query
   })
@@ -41,8 +40,9 @@ export const hotArticles = () => {
 // 文章详情
 export const article = (id: any) => {
   return request({
-    url: `${service}/article/${id}`,
-    method: 'get'
+    url: `${api}/get`,
+    method: 'get',
+    params: { id }
   })
 }
 // 归档列表

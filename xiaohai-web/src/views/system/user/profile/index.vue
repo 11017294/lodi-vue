@@ -15,7 +15,7 @@
               <li class="list-group-item">
                 <svg-icon icon-class="user" />
                 昵称
-                <div class="pull-right">{{ user.nickName }}</div>
+                <div class="pull-right">{{ user.nickname }}</div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="gender-0" />

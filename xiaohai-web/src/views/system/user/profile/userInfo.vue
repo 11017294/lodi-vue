@@ -1,10 +1,10 @@
 <template>
   <el-form ref="form" :model="user" :rules="rules" label-width="80px">
-    <el-form-item label="用户名" prop="nickName">
+    <el-form-item label="用户名" prop="nickname">
       <el-input v-model="user.username" maxlength="30" />
     </el-form-item>
-    <el-form-item label="用户昵称" prop="nickName">
-      <el-input v-model="user.nickName" maxlength="30" />
+    <el-form-item label="用户昵称" prop="nickname">
+      <el-input v-model="user.nickname" maxlength="30" />
     </el-form-item>
     <el-form-item label="性别">
       <el-radio-group v-model="user.gender">
@@ -55,7 +55,7 @@ export default {
     return {
       // 表单校验
       rules: {
-        nickName: [
+        nickname: [
           { required: true, message: '用户昵称不能为空', trigger: 'blur' }
         ],
         mobile: [
@@ -74,8 +74,8 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           updateUser(this.user).then(response => {
-            if (this.user.nickName) {
-              this.$store.commit('user/SET_NAME', this.user.nickName)
+            if (this.user.nickname) {
+              this.$store.commit('user/SET_NAME', this.user.nickname)
             }
             this.$message.success(response.msg)
           })

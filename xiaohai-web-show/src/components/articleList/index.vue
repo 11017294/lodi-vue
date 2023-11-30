@@ -117,8 +117,8 @@ watch(
           <span style="display: flex; align-items: center; justify-content: space-between">
             <span style="display: flex; align-items: center">
               <el-space size="small">
-                <el-avatar size="small" :src="image(article.avatar)" />
-                <span v-if="article.nickName" class="text-xs">{{ article.nickName }}</span>
+                <el-avatar size="small" :src="image(article.userAvatar)" />
+                <span v-if="article.nickname" class="text-xs">{{ article.nickname }}</span>
                 <span v-else class="text-xs">{{ article.username }}</span>
                 <el-tag size="small">{{ article.categoryName }}</el-tag>
                 <template v-for="(item, index) in store.tags">
@@ -206,8 +206,8 @@ watch(
           <span style="display: flex; align-items: center; justify-content: space-between">
             <span style="display: flex; align-items: center">
               <el-space size="small">
-                <el-avatar size="small" :src="image(article.avatar)" />
-                <span v-if="article.nickName" class="text-xs">{{ article.nickName }}</span>
+                <el-avatar size="small" :src="image(article.userAvatar)" />
+                <span v-if="article.nickname" class="text-xs">{{ article.nickname }}</span>
                 <span v-else class="text-xs">{{ article.username }}</span>
               </el-space>
             </span>

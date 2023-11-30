@@ -121,7 +121,7 @@
             @click="cancelClick('/tags' + '?id=' + tag.id + '&name=' + tag.name)"
           >
             <svg-icon icon-class="label-sign"></svg-icon> {{ tag.name }}
-            <div class="tags">{{ tag.count }}</div>
+            <div class="tags">{{ tag.clickCount }}</div>
           </el-button>
         </div>
       </el-space>

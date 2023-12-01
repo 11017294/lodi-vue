@@ -46,7 +46,7 @@
     <pagination
       v-show="total>0"
       :total="total"
-      :page.sync="queryParams.pageNum"
+      :page.sync="queryParams.currentPage"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
@@ -70,7 +70,7 @@ export default {
       onLineUserList: [],
       // 查询参数
       queryParams: {
-        pageNum: 1,
+        currentPage: 1,
         pageSize: 10
       }
     }

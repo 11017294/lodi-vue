@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, toRefs } from 'vue'
 import RightSide from '@/components/layouts/RightSide.vue'
-import { listArticles, listCategory } from '@/api/show'
+import { listArticles, getArticleByCategoryId, listCategory } from '@/api/show'
 
 import articleList from '@/components/articleList/index.vue'
 import { getArticle, image } from '@/utils/publicMethods'
@@ -26,8 +26,7 @@ const data = reactive({
   queryParams: {
     currentPage: 1,
     pageSize: 10,
-    type: 1,
-    id: null
+    categoryId: null
   }
 })
 
@@ -35,10 +34,8 @@ const { queryParams } = toRefs(data)
 
 /**
  * 轮播
- * @param type
  */
 function getCarouselList() {
-  queryParams.value.type = 2
   queryParams.value.currentPage = 1
   queryParams.value.pageSize = 3
   listArticles(queryParams.value).then((response) => {
@@ -47,12 +44,22 @@ function getCarouselList() {
 }
 
 /** 查询展示文章列表 */
-function getList(val: any, id: any) {
-  queryParams.value.type = val
-  queryParams.value.id = id
+function getList() {
   queryParams.value.currentPage = 1
   queryParams.value.pageSize = 10
   listArticles(queryParams.value).then((response) => {
+    dataList.value = response.data.data.records
+    total.value = response.data.data.total
+    const a = Math.ceil(total.value / queryParams.value.pageSize)
+    loadMores.value = queryParams.value.currentPage + 1 <= a
+  })
+}
+
+function getListByCategoryId(id: any) {
+  queryParams.value.categoryId = id
+  queryParams.value.currentPage = 1
+  queryParams.value.pageSize = 10
+  getArticleByCategoryId(queryParams.value).then((response) => {
     dataList.value = response.data.data.records
     total.value = response.data.data.total
     const a = Math.ceil(total.value / queryParams.value.pageSize)
@@ -89,7 +96,7 @@ function getCategory() {
 }
 
 getCategory()
-getList(1, null)
+getList()
 getCarouselList()
 </script>
 
@@ -119,14 +126,14 @@ getCarouselList()
             <el-button
               style="border-radius: 10px"
               :class="{ selected: null === selectedButton }"
-              @click="getList(1, null)"
-              >全部</el-button
+              @click="getList"
+              >推荐</el-button
             >
             <el-button
               style="border-radius: 10px"
               v-for="category in categories"
               :class="{ selected: category.id === selectedButton }"
-              @click="getList(6, category.id)"
+              @click="getListByCategoryId(category.id)"
             >
               {{ category.name }}
               <div class="tags">{{ category.clickCount }}</div>
@@ -139,13 +146,13 @@ getCarouselList()
             <el-button
               style="border-radius: 10px"
               :class="{ selected: null === selectedButton }"
-              @click="getList(1, null)"
-              >全部</el-button
+              @click="getList"
+              >推荐</el-button
             >
             <el-button
               style="border-radius: 10px"
               v-for="category in categories"
-              @click="getList(6, category.id)"
+              @click="getListByCategoryId(category.id)"
             >
               {{ category.name }}
               <div class="tags">{{ category.clickCount }}</div>
@@ -176,14 +183,14 @@ getCarouselList()
           <el-button
             style="border-radius: 10px"
             :class="{ selected: null === selectedButton }"
-            @click="getList(1, null)"
-            >全部</el-button
+            @click="getList"
+            >推荐</el-button
           >
           <el-button
             style="border-radius: 10px"
             v-for="category in categories"
             :class="{ selected: category.id === selectedButton }"
-            @click="getList(6, category.id)"
+            @click="getListByCategoryId(category.id)"
           >
             {{ category.name }}
             <div class="tags">{{ category.clickCount }}</div>
@@ -196,13 +203,13 @@ getCarouselList()
           <el-button
             style="border-radius: 10px"
             :class="{ selected: null === selectedButton }"
-            @click="getList(1, null)"
+            @click="getList"
             >全部</el-button
           >
           <el-button
             style="border-radius: 10px"
             v-for="category in categories"
-            @click="getList(6, category.id)"
+            @click="getListByCategoryId(category.id)"
           >
             {{ category.name }}
             <div class="tags">{{ category.clickCount }}</div>

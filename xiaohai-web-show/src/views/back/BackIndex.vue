@@ -56,7 +56,7 @@ const total = ref()
 
 const data = reactive({
   queryParams: {
-    pageNum: 1,
+    currentPage: 1,
     pageSize: 10
   }
 })
@@ -77,13 +77,13 @@ function getArticleId(id: any) {
 }
 
 const handleSizeChange = (val: number) => {
-  queryParams.value.pageNum = val
+  queryParams.value.currentPage = val
   getList()
   console.log(`${val} items per page`)
 }
 
 const handleCurrentChange = (val: number) => {
-  queryParams.value.pageNum = val
+  queryParams.value.currentPage = val
   getList()
   console.log(`current page: ${val}`)
 }

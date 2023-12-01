@@ -25,15 +25,29 @@ export const listArticles = (query: any) => {
     params: query
   })
 }
+// 根据分类获取文章列表
+export const getArticleByCategoryId = (query: any) => {
+  return request({
+    url: '/category/getArticleByCategoryId',
+    method: 'get',
+    params: query
+  })
+}
+// 根据标签获取文章列表
+export const getArticleByTagId = (query: any) => {
+  return request({
+    url: '/tags/getArticleByTagId',
+    method: 'get',
+    params: query
+  })
+}
 // 查询热榜文章列表数据
 export const hotArticles = () => {
   return request({
-    url: `${api}/articles`,
+    url: `${api}/getHotArticle`,
     method: 'get',
     params: {
-      pageNum: 1,
-      pageSize: 5,
-      type: 2
+      currentPage: 1
     }
   })
 }
@@ -54,11 +68,11 @@ export const listBack = (query: any) => {
   })
 }
 // 查询文章
-export const getSearch = (keywords: any) => {
+export const getSearch = (query: any) => {
   return request({
-    url: `${api}/search`,
+    url: `${api}/getArticleBySearch`,
     method: 'get',
-    params: { keywords }
+    params: query
   })
 }
 

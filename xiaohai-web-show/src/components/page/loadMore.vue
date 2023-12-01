@@ -9,12 +9,12 @@
 <!--    type: Number,-->
 <!--    default: 10-->
 <!--  },-->
-<!--  pageNum: {-->
+<!--  currentPage: {-->
 <!--    type: Number,-->
 <!--    default: 1-->
 <!--  }-->
 <!--})-->
-<!--const { total, pageSize,pageNum } = toRefs(props)-->
+<!--const { total, pageSize,currentPage } = toRefs(props)-->
 
 <!--// 是否展示加载更多-->
 <!--const loadMores = ref(true)-->
@@ -24,11 +24,11 @@
 <!-- */-->
 <!--function loadMore() {-->
 <!--  const a = Math.ceil(total.value / pageSize?.value)-->
-<!--  if (pageNum?.value + 1 >= a) {-->
+<!--  if (currentPage?.value + 1 >= a) {-->
 <!--    loadMores.value = false-->
 <!--  }-->
-<!--  if (pageNum?.value + 1 <= a) {-->
-<!--    pageNum?.value = 1 + pageNum?.value-->
+<!--  if (currentPage?.value + 1 <= a) {-->
+<!--    currentPage?.value = 1 + currentPage?.value-->
 <!--    listArticles(queryParams.value).then((response) => {-->
 <!--      dataList.value = [...dataList.value, ...response.data.data.records]-->
 <!--    })-->

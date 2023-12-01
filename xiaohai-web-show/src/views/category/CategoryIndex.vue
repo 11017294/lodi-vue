@@ -5,12 +5,12 @@
       <el-icon><Menu /></el-icon>
       {{ name }}
     </h1>
-    <el-card v-if="queryParams.id == 0" class="box-card" shadow="hover">
+    <el-card v-if="queryParams.categoryId == 0" class="box-card" shadow="hover">
       <el-space wrap size="large">
         <div v-for="category in categories" :key="category.id">
           <el-button text bg size="large" @click="cancelClick(category)">
             <svg-icon icon-class="label-sign"></svg-icon> {{ category.name }}
-            <div class="tags">{{ category.count }}</div>
+            <div class="tags">{{ category.clickCount }}</div>
           </el-button>
         </div>
       </el-space>
@@ -31,7 +31,7 @@
 import { reactive, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import RightSide from '@/components/layouts/RightSide.vue'
-import { listArticles, listCategory } from '@/api/show'
+import { getArticleByCategoryId, listCategory } from '@/api/show'
 import articleList from '@/components/articleList/index.vue'
 import useStore from '@/store/index'
 
@@ -52,10 +52,9 @@ const loadMores = ref(true)
 
 const data = reactive({
   queryParams: {
-    pageNum: 1,
+    currentPage: 1,
     pageSize: 10,
-    type: 6,
-    id: 0
+    categoryId: 0
   }
 })
 
@@ -70,14 +69,14 @@ function cancelClick(category: any) {
 
 /** 查询展示文章列表 */
 function getList(val: any) {
-  queryParams.value.id = val
-  queryParams.value.pageNum = 1
+  queryParams.value.categoryId = val
+  queryParams.value.currentPage = 1
   queryParams.value.pageSize = 10
-  listArticles(queryParams.value).then((response) => {
+  getArticleByCategoryId(queryParams.value).then((response) => {
     dataList.value = response.data.data.records
     total.value = response.data.data.total
     const a = Math.ceil(total.value / queryParams.value.pageSize)
-    loadMores.value = queryParams.value.pageNum + 1 <= a
+    loadMores.value = queryParams.value.currentPage + 1 <= a
   })
 }
 
@@ -86,12 +85,12 @@ function getList(val: any) {
  */
 function loadMore() {
   const a = Math.ceil(total.value / queryParams.value.pageSize)
-  if (queryParams.value.pageNum + 1 >= a) {
+  if (queryParams.value.currentPage + 1 >= a) {
     loadMores.value = false
   }
-  if (queryParams.value.pageNum + 1 <= a) {
-    queryParams.value.pageNum = 1 + queryParams.value.pageNum
-    listArticles(queryParams.value).then((response) => {
+  if (queryParams.value.currentPage + 1 <= a) {
+    queryParams.value.currentPage = 1 + queryParams.value.currentPage
+    getArticleByCategoryId(queryParams.value).then((response) => {
       dataList.value = [...dataList.value, ...response.data.data.records]
     })
   }

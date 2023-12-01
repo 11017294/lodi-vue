@@ -31,6 +31,9 @@
           <p class="search-reslut-content" v-html="item.summary" />
         </li>
       </ul>
+      <el-space v-if="data.keywords" direction="vertical" fill size="large" style="display: flex">
+        <el-button v-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
+      </el-space>
       <!-- 搜索结果不存在提示 -->
       <div v-show="data.flag && data.articleList.length === 0" style="font-size: 0.875rem">
         找不到您查询的内容：{{ data.keywords }}
@@ -40,11 +43,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref, toRefs, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { getSearch } from '@/api/show'
 
 const dialogVisible = ref(false)
+// 是否展示加载更多
+const loadMores = ref(true)
+// 总数
+const total = ref()
 
 const data = reactive({
   keywords: '',
@@ -56,6 +63,16 @@ function reset() {
   data.articleList = []
   data.flag = false
 }
+// 请求参数
+const queryData = reactive({
+  queryParams: {
+    keywords: '',
+    pageSize: 10,
+    currentPage: 1
+  }
+})
+const { queryParams } = toRefs(queryData)
+
 const router = useRouter()
 // 页面跳转
 function goTo(id: any) {
@@ -75,12 +92,33 @@ watch(
   () => {
     data.flag = data.keywords.trim() !== ''
     if (data.flag) {
-      getSearch(data.keywords).then((res) => {
-        data.articleList = res.data.data
+      queryParams.value.keywords = data.keywords
+      queryParams.value.currentPage = 1
+      getSearch(queryParams.value).then((res) => {
+        data.articleList = res.data.data.records
+        total.value = res.data.data.total
+        const a = Math.ceil(total.value / queryParams.value.pageSize)
+        loadMores.value = queryParams.value.currentPage + 1 <= a
       })
     }
   }
 )
+
+/**
+ * 加载更多
+ */
+function loadMore() {
+  const a = Math.ceil(total.value / queryParams.value.pageSize)
+  if (queryParams.value.currentPage + 1 >= a) {
+    loadMores.value = false
+  }
+  if (queryParams.value.currentPage + 1 <= a) {
+    queryParams.value.currentPage = 1 + queryParams.value.currentPage
+    getSearch(queryParams.value).then((response) => {
+      data.articleList = [...data.articleList, ...(response.data.data.records as [])]
+    })
+  }
+}
 </script>
 
 <style scoped>

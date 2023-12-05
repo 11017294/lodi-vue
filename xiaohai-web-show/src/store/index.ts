@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
 import { getToken, removeToken, setToken } from '@/utils/auth'
-import { logout } from '@/api/user'
 import { findShowBasic, friendLink, hotArticles, listTag } from '@/api/show'
 import { image } from '@/utils/publicMethods'
-import { getInfo, login } from '@/api/auth'
+import { getInfo, login, logout } from '@/api/auth'
 
 const useStore = defineStore('user', {
   state: () => {

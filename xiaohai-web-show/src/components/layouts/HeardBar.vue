@@ -56,32 +56,12 @@
             <el-dropdown>
               <el-image v-if="!store.avatar" size="default" src="../static/avatar.svg" />
               <el-avatar size="default" :src="store.avatar" v-else />
-
               <template #dropdown>
                 <el-dropdown-menu v-if="!store.token">
                   <el-dropdown-item @click="adminClick"> 登 录 </el-dropdown-item>
                 </el-dropdown-menu>
                 <el-dropdown-menu v-else>
-                  <!--                  <div style="display: flex; flex-direction: column">-->
-                  <!--                    <div style="display: flex; align-items: center; margin-left: 10px">-->
-                  <!--                      <el-avatar size="default" :src="store.avatar" />-->
-                  <!--                      <div-->
-                  <!--                        style="-->
-                  <!--                          display: flex;-->
-                  <!--                          flex-direction: column;-->
-                  <!--                          margin-left: 20px;-->
-                  <!--                          align-items: center;-->
-                  <!--                        "-->
-                  <!--                      >-->
-                  <!--                        <h3>{{ store.name }}</h3>-->
-                  <!--                        <div>{{ store.summary }}</div>-->
-                  <!--                      </div>-->
-                  <!--                    </div>-->
-                  <!--                    <div style="display: flex">-->
-                  <el-dropdown-item @click="manageClick">后台管理</el-dropdown-item>
-                  <el-dropdown-item divided @click="exit">退出登录</el-dropdown-item>
-                  <!--                    </div>-->
-                  <!--                  </div>-->
+                  <el-dropdown-item @click="exit">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -147,7 +127,7 @@
         style="width: 100px; height: 100px"
         src="../static/avatar.svg"
       />
-      <el-avatar @click="manageClick" v-else :size="100" :src="store.avatar" />
+      <el-avatar v-else :size="100" :src="store.avatar" />
       <h2>{{ store.name }}</h2>
       <div>{{ store.summary }}</div>
       <div style="padding-top: 20px">
@@ -229,10 +209,6 @@ function cancelClick(path: any) {
 // 跳转登录
 function adminClick() {
   window.open(`/login?show=${router.currentRoute.value.fullPath}`, '_self')
-}
-// 跳转管理页
-function manageClick() {
-  window.open(`${import.meta.env.VITE_APP_BLOG_WEB_API}/#/dashboard`, '_self')
 }
 
 // 登录信息获取

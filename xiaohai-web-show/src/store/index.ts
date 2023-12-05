@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { getToken, removeToken } from '@/utils/auth'
-import { getInfo, logout } from '@/api/user'
+import { getToken, removeToken, setToken } from '@/utils/auth'
+import { logout } from '@/api/user'
 import { findShowBasic, friendLink, hotArticles, listTag } from '@/api/show'
 import { image } from '@/utils/publicMethods'
+import { getInfo, login } from '@/api/auth'
 
 const useStore = defineStore('user', {
   state: () => {
@@ -26,6 +27,24 @@ const useStore = defineStore('user', {
     }
   },
   actions: {
+    // 登录
+    login(userInfo: any) {
+      return new Promise((resolve, reject) => {
+        login(userInfo)
+          .then((response) => {
+            const { data, message } = response.data
+            if (data == null) {
+              return reject(message)
+            }
+            this.token = data
+            setToken(data)
+            resolve('')
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      })
+    },
     // 获取用户登录信息
     getInfo() {
       return new Promise((resolve, reject) => {
@@ -35,10 +54,10 @@ const useStore = defineStore('user', {
             if (data == null) {
               return reject('验证失败，请重新登录。')
             }
-            const { username, nickname, avatar, id, summary, gitee, github, qqNumber, weChat } =
-              data.info
+            const { username, nickname, userAvatar, id, summary, gitee, github, qqNumber, weChat } =
+              data
             this.name = nickname || username
-            this.avatar = import.meta.env.VITE_APP_BASE_API_FILE + avatar
+            this.avatar = userAvatar
             this.userId = id
             this.summary = summary
             this.gitee = gitee

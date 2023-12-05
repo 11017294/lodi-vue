@@ -47,12 +47,7 @@ axios.interceptors.response.use(
         type: 'warning'
       })
         .then(() => {
-          window.open(
-            `${import.meta.env.VITE_APP_BLOG_WEB_API}/#/login?show=${
-              router.currentRoute.value.fullPath
-            }`,
-            '_self'
-          )
+          window.open(`/login?show=${router.currentRoute.value.fullPath}`, '_self')
         })
         .catch(() => {})
       const store = useStore()

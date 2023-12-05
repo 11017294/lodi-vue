@@ -5,6 +5,7 @@ import { listArticles, getArticleByCategoryId, listCategory } from '@/api/show'
 
 import articleList from '@/components/articleList/index.vue'
 import { getArticle, image } from '@/utils/publicMethods'
+import useStore from '@/store'
 
 // 轮播列表
 const carouselList: any = ref([])
@@ -29,6 +30,9 @@ const data = reactive({
     categoryId: null
   }
 })
+const store = useStore()
+
+store.getInfo()
 
 const { queryParams } = toRefs(data)
 

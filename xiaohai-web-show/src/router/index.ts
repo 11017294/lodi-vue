@@ -1,5 +1,5 @@
 // 路由配置文件
-import { createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,7 +13,9 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/message', component: () => import('@/views/message/MessageIndex.vue') },
       { path: '/links', component: () => import('@/views/links/LinksIndex.vue') },
       { path: '/about', component: () => import('@/views/about/AboutIndex.vue') },
-      { path: '/article/:id', component: () => import('@/views/article/ArticleIndex.vue') }
+      { path: '/article/:id', component: () => import('@/views/article/ArticleIndex.vue') },
+      { path: '/Login', component: () => import('@/views/login/LoginIndex.vue') },
+      { path: '/register', component: () => import('@/views/login/RegisterIndex.vue') }
     ]
   }
 ]

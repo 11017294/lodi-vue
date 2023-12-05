@@ -228,10 +228,7 @@ function cancelClick(path: any) {
 }
 // 跳转登录
 function adminClick() {
-  window.open(
-    `${import.meta.env.VITE_APP_BLOG_WEB_API}/#/login?show=${router.currentRoute.value.fullPath}`,
-    '_self'
-  )
+  window.open(`/login?show=${router.currentRoute.value.fullPath}`, '_self')
 }
 // 跳转管理页
 function manageClick() {

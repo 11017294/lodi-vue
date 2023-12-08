@@ -14,8 +14,9 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/links', component: () => import('@/views/links/LinksIndex.vue') },
       { path: '/about', component: () => import('@/views/about/AboutIndex.vue') },
       { path: '/article/:id', component: () => import('@/views/article/ArticleIndex.vue') },
-      { path: '/Login', component: () => import('@/views/login/LoginIndex.vue') },
-      { path: '/register', component: () => import('@/views/login/RegisterIndex.vue') }
+      { path: '/login', component: () => import('@/views/login/LoginIndex.vue') },
+      { path: '/register', component: () => import('@/views/login/RegisterIndex.vue') },
+      { path: '/writing', component: () => import('@/views/article/writingIndex.vue') }
     ]
   }
 ]

@@ -52,6 +52,14 @@
               style="font-size: 18px"
             ></svg-icon>
           </div>
+          <div class="menus-item" v-if="store.token">
+            <svg-icon
+              icon-class="edit"
+              @click="cancelClick('/writing')"
+              class="edit"
+              style="font-size: 20px"
+            />
+          </div>
           <div class="menus-item">
             <el-dropdown>
               <el-image v-if="!store.avatar" size="default" src="../static/avatar.svg" />
@@ -183,6 +191,7 @@ import useStore from '@/store/index'
 import { toggleDark, isDark } from '@/utils/dark'
 import SearchModel from '@/components/seach/SearchModel.vue'
 import { open } from '@/utils/publicMethods'
+import writingIndex from '@/views/article/writingIndex.vue'
 
 const store = useStore()
 const router = useRouter()

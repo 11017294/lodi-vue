@@ -1,5 +1,6 @@
 // 路由配置文件
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { getToken } from '@/utils/auth'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,6 +26,18 @@ const router = createRouter({
   // history: createWebHashHistory(),
   history: createWebHistory(), // 去掉地址栏里的#
   routes
+})
+
+const blackList = ['/writing']
+
+router.beforeEach((to, from, next) => {
+  // 未登录
+  if (!getToken()) {
+    if (blackList.indexOf(to.path) === 0) {
+      next('/login')
+    }
+  }
+  next()
 })
 
 export default router

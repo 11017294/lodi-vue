@@ -59,26 +59,14 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="顶置" prop="isTop">
-                    <el-radio
-                      v-for="(item, index) in isTop"
-                      :key="index"
-                      v-model="form.isTop"
-                      :label="index"
-                      border
-                      >{{ item }}</el-radio
-                    >
-                  </el-form-item>
-                </el-col>
               </el-row>
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label="发布" prop="isPush">
+                  <el-form-item label="发布" prop="isPublish">
                     <el-radio
-                      v-for="(item, index) in isPush"
+                      v-for="(item, index) in isPublish"
                       :key="index"
-                      v-model="form.isPush"
+                      v-model="form.isPublish"
                       :label="index"
                       border
                       >{{ item }}</el-radio
@@ -146,7 +134,7 @@
           <div style="height: calc((100vh - 480px) - 1rem)">
             <mavon-editor
               ref="md"
-              v-model="form.text"
+              v-model="form.content"
               style="height: 100%; width: 100%"
               placeholder="输入文章内容..."
               font-size="18px"
@@ -165,6 +153,7 @@
 import { InfoFilled, QuestionFilled, UploadFilled } from '@element-plus/icons-vue'
 import { getArticleByTagId, listCategory, listTag } from '@/api/show.ts'
 import { deleteImage, uploadImage } from '@/api/file.ts'
+import { addArticle, updateArticle } from '@/api/article.ts'
 
 export default {
   name: 'WritingIndex',
@@ -174,8 +163,7 @@ export default {
       // 标题
       title: '新文章',
       isOriginal: ['原创', '转载'],
-      isPush: ['草稿', '发布'],
-      isTop: ['否', '是'],
+      isPublish: ['草稿', '发布'],
       // 标签下拉选
       TagsList: [],
       // 分类下拉选
@@ -186,19 +174,17 @@ export default {
         summary: [{ required: true, message: '请输入简介', trigger: 'blur' }],
         categoryId: [{ required: true, message: '分类不能为空', trigger: 'blur' }],
         tags: [{ required: true, message: '标签不能为空', trigger: 'blur' }],
-        isTop: [{ required: true, message: '顶置不能为空', trigger: 'blur' }],
-        isPush: [{ required: true, message: '发布不能为空', trigger: 'blur' }],
+        isPublish: [{ required: true, message: '发布不能为空', trigger: 'blur' }],
         isOriginal: [{ required: true, message: '类型不能为空', trigger: 'blur' }]
       },
       form: {
         id: '',
         title: '',
         cover: '',
-        text: '',
+        content: '',
         categoryId: '',
         tags: [],
-        isPush: '',
-        isTop: '',
+        isPublish: '',
         isOriginal: '',
         originalUrl: ''
       }
@@ -297,22 +283,20 @@ export default {
             this.$message.error('请上传封面')
             return
           }
-          if (this.form.text === '') {
+          if (this.form.content === '') {
             this.$message.error('请填写文章内容')
             return
           }
-          this.form.cover = this.form.cover.replaceAll(process.env.VUE_APP_BASE_API_FILE, '')
-          this.form.text = this.form.text.replaceAll(process.env.VUE_APP_BASE_API_FILE, '..')
           if (this.form.id !== '') {
-            // updateArticle(this.form).then((response) => {
-            //   this.$message.success(response.msg)
-            //   this.$router.push('/note/article')
-            // })
+            updateArticle(this.form).then((response) => {
+              this.$message.success(response.msg)
+              this.$router.push('/writing')
+            })
           } else {
-            // addArticle(this.form).then((response) => {
-            //   this.$message.success(response.msg)
-            //   this.$router.push('/note/article')
-            // })
+            addArticle(this.form).then((response) => {
+              this.$message.success(response.msg)
+              this.$router.push('/writing')
+            })
           }
         }
       })

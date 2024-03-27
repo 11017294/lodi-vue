@@ -42,6 +42,14 @@
               <div class="text-sm text-color">文章</div>
               <div class="text-xl font-number">{{ showBasic.articleCount }}</div>
             </el-space>
+            <el-space fill direction="vertical" size="small">
+              <div class="text-sm text-color">标签</div>
+              <div class="text-xl font-number">{{ showBasic.tagCount }}</div>
+            </el-space>
+            <el-space fill direction="vertical" size="small">
+              <div class="text-sm text-color">分类</div>
+              <div class="text-xl font-number">{{ showBasic.categoryCount }}</div>
+            </el-space>
             <el-space fill direction="vertical">
               <div class="text-sm text-color">收藏</div>
               <div class="text-xl font-number">{{ showBasic.collectCount }}</div>

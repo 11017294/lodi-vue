@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getToken, removeToken, setToken } from '@/utils/auth'
-import { findShowBasic, friendLink, hotArticles, listTag } from '@/api/show'
+import {findShowBasic, friendLink, hotArticles, listCategory, listTag} from '@/api/show'
 import { image } from '@/utils/publicMethods'
 import { getInfo, login, logout } from '@/api/auth'
 
@@ -19,6 +19,7 @@ const useStore = defineStore('user', {
       showBasic: '',
       website: {} as any,
       tags: [],
+      categories: [],
       friendLinkList: [],
       hotArticles: [],
       count: 0,
@@ -89,8 +90,8 @@ const useStore = defineStore('user', {
       return new Promise<void>((resolve, reject) => {
         findShowBasic()
           .then((response) => {
-            this.showBasic = response.data.data.basic
-            this.website = response.data.data.website
+            this.showBasic = response.data.data
+            // this.website = response.data.data.website
             document.title = this.website.title
             // 获取指定 meta 标签
             const descriptionMeta = document.querySelector('meta[name="description"]')
@@ -122,6 +123,19 @@ const useStore = defineStore('user', {
         listTag()
           .then((response) => {
             this.tags = response.data.data
+            resolve()
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      })
+    },
+    // 获取分类信息
+    getCategories() {
+      return new Promise<void>((resolve, reject) => {
+        listCategory()
+          .then((response) => {
+            this.categories = response.data.data
             resolve()
           })
           .catch((error) => {

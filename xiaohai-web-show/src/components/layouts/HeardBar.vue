@@ -241,7 +241,8 @@ if (store.token) {
 }
 store.getSystem()
 store.getTags()
-store.getFriendLink()
+store.getCategories()
+// store.getFriendLink()
 store.getHot()
 </script>
 

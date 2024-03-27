@@ -2,7 +2,7 @@
 import { reactive, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import RightSide from '@/components/layouts/RightSide.vue'
-import { getArticleByTagId, listTag } from '@/api/show'
+import { getArticleByTagId } from '@/api/show'
 import articleList from '@/components/articleList/index.vue'
 import useStore from '@/store/index'
 import { getQueryVariable } from '@/utils/publicMethods'
@@ -10,8 +10,6 @@ import { getQueryVariable } from '@/utils/publicMethods'
 const store = useStore()
 // 标签名称
 const name = ref('标签')
-// 标签列表
-const tags = ref([])
 // 展示文章列表
 const dataList: any = ref([])
 // 总数

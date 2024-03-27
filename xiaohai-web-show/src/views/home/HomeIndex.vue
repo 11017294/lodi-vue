@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, toRefs } from 'vue'
 import RightSide from '@/components/layouts/RightSide.vue'
-import { listArticles, getArticleByCategoryId, listCategory } from '@/api/show'
+import { listArticles, getArticleByCategoryId } from '@/api/show'
 
 import articleList from '@/components/articleList/index.vue'
 import { getArticle, image } from '@/utils/publicMethods'
@@ -86,16 +86,7 @@ function loadMore() {
 function classification() {
   classify.value = !classify.value
 }
-/**
- * 分类
- */
-function getCategory() {
-  listCategory().then((response) => {
-    categories.value = response.data.data
-  })
-}
 
-getCategory()
 getList()
 getCarouselList()
 </script>

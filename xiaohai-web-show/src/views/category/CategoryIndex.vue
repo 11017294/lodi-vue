@@ -7,7 +7,7 @@
     </h1>
     <el-card v-if="queryParams.categoryId == 0" class="box-card" shadow="hover">
       <el-space wrap size="large">
-        <div v-for="category in categories" :key="category.id">
+        <div v-for="category in store.categories" :key="category.id">
           <el-button text bg size="large" @click="cancelClick(category)">
             <svg-icon icon-class="label-sign"></svg-icon> {{ category.name }}
             <div class="tags">{{ category.clickCount }}</div>
@@ -29,20 +29,15 @@
 
 <script setup lang="ts">
 import { reactive, ref, toRefs } from 'vue'
-import { useRouter } from 'vue-router'
 import RightSide from '@/components/layouts/RightSide.vue'
-import { getArticleByCategoryId, listCategory } from '@/api/show'
+import { getArticleByCategoryId } from '@/api/show'
 import articleList from '@/components/articleList/index.vue'
 import useStore from '@/store/index'
 
 const store = useStore()
 
-// 分类列表
-const categories = ref([])
 // 分类名称
 const name = ref('分类')
-// 标签列表
-const tags = ref([])
 // 展示文章列表
 const dataList: any = ref([])
 // 总数
@@ -59,15 +54,9 @@ const data = reactive({
 })
 
 const { queryParams } = toRefs(data)
-
-const router = useRouter()
-// 分类跳转
-function cancelClick(category: any) {
-  name.value = category.name
-  getList(category.id)
-}
-
-/** 查询展示文章列表 */
+/**
+ *  查询展示文章列表
+ */
 function getList(val: any) {
   queryParams.value.categoryId = val
   queryParams.value.currentPage = 1
@@ -80,6 +69,13 @@ function getList(val: any) {
   })
 }
 
+/**
+ * 分类跳转
+ */
+function cancelClick(category: any) {
+  name.value = category.name
+  getList(category.id)
+}
 /**
  * 加载更多
  */
@@ -95,16 +91,6 @@ function loadMore() {
     })
   }
 }
-/**
- * 分类
- */
-function getCategory() {
-  listCategory().then((response) => {
-    categories.value = response.data.data
-  })
-}
-
-getCategory()
 </script>
 
 <style scoped>

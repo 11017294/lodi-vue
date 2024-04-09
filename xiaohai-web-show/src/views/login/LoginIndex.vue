@@ -1,13 +1,7 @@
 <template>
   <div class="login-container">
     <div class="loginPart">
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginRules"
-        auto-complete="on"
-        label-position="left"
-      >
+      <el-form auto-complete="on" label-position="left">
         <h2>登 录</h2>
         <el-form-item prop="username" class="inputNew">
           <el-input
@@ -16,8 +10,6 @@
             placeholder="请输入用户名/邮箱 "
             name="username"
             type="text"
-            tabindex="1"
-            auto-complete="on"
           >
             <template #prefix>
               <svg-icon icon-class="user" />
@@ -27,24 +19,15 @@
 
         <el-form-item prop="password" class="inputNew">
           <el-input
-            :key="passwordType"
             ref="password"
             v-model="loginForm.password"
-            :type="passwordType"
+            show-password
             placeholder="请输入密码"
             name="password"
-            tabindex="2"
-            auto-complete="on"
             @keyup.enter.native="handleLogin"
           >
             <template #prefix>
               <svg-icon icon-class="password" />
-            </template>
-            <template #suffix>
-              <svg-icon
-                :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
-                @click="showPwd"
-              />
             </template>
           </el-input>
         </el-form-item>
@@ -73,102 +56,51 @@
   </div>
 </template>
 
-<script>
-import useStore from '@/store/index.ts'
+<script setup lang="ts">
+import { ref, reactive, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
+import useStore from '@/store'
 
 const store = useStore()
 
-export default {
-  name: 'LoginIndex',
-  data() {
-    return {
-      loginForm: {
-        username: '',
-        password: '',
-        loginType: 'password',
-        rememberMe: false
-      },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', message: '请输入您的用户名' }],
-        password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }]
-      },
-      loading: false,
-      passwordType: 'password',
-      redirect: undefined,
-      show: undefined
-    }
-  },
-  watch: {
-    $route: {
-      handler(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
-  },
-  created() {
-    this.getCode()
-    this.getCookie()
-  },
-  methods: {
-    // 跳转注册
-    registerClick() {
-      this.$router.push('/register')
-    },
-    getCode() {
-      // getCodeImg().then(res => {
-      //   this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-      //   if (this.captchaEnabled) {
-      //     this.codeUrl = "data:image/gif;base64," + res.img;
-      //     this.loginForm.uuid = res.uuid;
-      //   }
-      // });
-    },
-    getCookie() {
-      // const username = Cookies.get("username");
-      // const password = Cookies.get("password");
-      // const rememberMe = Cookies.get('rememberMe')
-      // this.loginForm = {
-      //   username: username === undefined ? this.loginForm.username : username,
-      //   password: password === undefined ? this.loginForm.password : decrypt(password),
-      //   rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
-      // };
-    },
-    // 是否显示输入内容
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
-    },
-    // 登录
-    handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        this.loading = true
-        store
-          .login(this.loginForm)
-          .then((res) => {
-            this.show = this.$route.query.show
-            if (this.show) {
-              window.open(this.show, '_self')
-            } else {
-              this.$router.push({ path: this.redirect || '/' })
-            }
-            this.loading = false
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
-    }
+const data = reactive({
+  loginForm: {
+    username: '',
+    password: '',
+    loginType: 'password',
+    rememberMe: false
   }
+})
+
+const { loginForm } = toRefs(data)
+const router = useRouter()
+
+const loading = ref(false)
+const redirect = ref(router.currentRoute.value.query)
+const show = ref()
+
+// 登录函数
+const handleLogin = async () => {
+  loading.value = true
+  store
+    .login(loginForm.value)
+    .then(() => {
+      if (show.value) {
+        window.open(show.value, '_self')
+      } else {
+        router.push({ path: redirect.value.show || '/' })
+      }
+      loading.value = false
+    })
+    .catch(() => {
+      loading.value = false
+    })
+  loading.value = false
+}
+
+// 跳转注册
+const registerClick = () => {
+  router.push('/register')
 }
 </script>
 

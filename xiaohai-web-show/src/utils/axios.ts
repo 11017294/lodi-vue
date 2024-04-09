@@ -38,9 +38,10 @@ axios.interceptors.response.use(
      * 根据你的项目实际情况来对 response 和 error 做处理
      * 这里对 response 和 error 不做任何处理，直接返回
      */
+    const res = response.data
+
     // 登录异常
-    if (response.data.code === 401) {
-      // ElMessage.error(`Code: ${response.status}, Message: ${response.data.msg}`)
+    if (res.code === 401) {
       ElMessageBox.confirm('继续使用，请重新登录', '提示', {
         confirmButtonText: '去登陆',
         cancelButtonText: '取消',
@@ -55,7 +56,11 @@ axios.interceptors.response.use(
         // window.location.reload()
       })
     }
-    return response
+    if (res.code !== 0) {
+      // ElMessage.error(`Code: ${response.status}, Message: ${res.message}`)
+      Promise.reject(new Error(res.message || 'Error'))
+    }
+    return res
   },
   (error) => {
     if (error.response && error.response.data) {

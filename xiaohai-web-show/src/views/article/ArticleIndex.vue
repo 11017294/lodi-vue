@@ -105,7 +105,11 @@
     >
       <span style="display: flex; align-items: center">
         <el-space size="default">
-          <el-avatar v-if="articleOne.userAvatar" size="small" :src="image(articleOne.userAvatar)" />
+          <el-avatar
+            v-if="articleOne.userAvatar"
+            size="small"
+            :src="image(articleOne.userAvatar)"
+          />
           <span class="text-sm">{{ articleOne.username }}</span>
         </el-space>
       </span>
@@ -170,12 +174,12 @@
       <el-card
         class="box-card"
         shadow="hover"
-        :body-style="{ padding: '0px', height: '440px' }"
+        :body-style="{ padding: '0px', height: '140px' }"
         style="position: relative"
       >
         <img src="../../assets/image/1.jpg" class="image" />
 
-        <div style="display: flex; padding: 10px; justify-content: center; text-align: center">
+        <!--        <div style="display: flex; padding: 10px; justify-content: center; text-align: center">
           <el-avatar v-if="userBasic.avatar" :src="image(userBasic.avatar)" class="panThumb" />
 
           <el-space direction="vertical" :size="'large'" fill style="margin-top: 20px; width: 80%">
@@ -225,7 +229,7 @@
               </el-space>
             </div>
           </el-space>
-        </div>
+        </div>-->
       </el-card>
       <el-card class="box-card" shadow="hover">
         <template #header>
@@ -250,21 +254,39 @@
 import { onBeforeMount, reactive, ref, toRefs, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { article, articleLike, deleteComment, getComment, listArticles, listTag } from '@/api/show'
-import { addComment } from '@/api/user'
+import { article, articleLike, listArticles } from '@/api/show'
 import comments from '@/components/comments/index.vue'
-import { image, markdownImageFile, open, openQQ } from '@/utils/publicMethods'
+import { image } from '@/utils/publicMethods'
+import { getByArticleId, addComment, deleteComment } from '@/api/comment'
+import useStore from '@/store'
 
 // 文章详情
-const articleOne = ref({})
-// 用户信息
-const userBasic = ref('')
+const articleOne = ref({
+  id: 0,
+  title: '',
+  content: '',
+  cover: '',
+  isOriginal: 0,
+  originalUrl: '',
+  clickCount: 0,
+  upvoteCount: 0,
+  collectCount: 0,
+  createTime: '',
+  categoryId: 0,
+  categoryName: '',
+  clickLike: 0,
+  username: '',
+  userAvatar: '',
+  tagsId: []
+})
+
 const route = useRoute()
 const titles = ref()
 const preview = ref()
 const router = useRouter()
+const store = useStore()
 // 标签列表
-const tags = ref([])
+const { tags } = store
 // 展示文章列表
 const dataList = ref([])
 // 评论数
@@ -286,11 +308,21 @@ const config = ref({
 
 const { queryParams } = toRefs(data)
 
+const commentData = reactive({
+  commentQueryParams: {
+    currentPage: 1,
+    pageSize: 5,
+    articleId: Number(route.params.id)
+  }
+})
+
+const { commentQueryParams } = toRefs(commentData)
+
 /** 查询展示推荐列表 */
 function getList(categoryId: any) {
   queryParams.value.id = categoryId
   listArticles(queryParams.value).then((response) => {
-    dataList.value = response.data.data.records
+    dataList.value = response.data.records
   })
 }
 
@@ -321,28 +353,12 @@ function clickLike(val: any) {
 // 获取文章详情
 const getArticle = async () => {
   await article(route.params.id).then((res: any) => {
-    articleOne.value = res.data.data
-    userBasic.value = res.data.data.userBasic
+    articleOne.value = res.data
     // 文章内图片地址替换
-    articleOne.value.text = articleOne.value.text.replaceAll(
-      markdownImageFile(''),
-      `${import.meta.env.VITE_APP_BASE_API_FILE}${markdownImageFile('..')}`
-    )
-    getList(res.data.data.categoryId)
+    getList(res.data.categoryId)
   })
 }
 
-/**
- * 标签列表
- */
-const getTags = async () => {
-  // 函解构用async和await包裹
-  const { data: res } = await listTag() // 获取接口调用函数getList中的值data 其中data是表单里的数据
-  // 对data进行解构赋值 取出请求的结果res
-  tags.value = res.data
-}
-
-getTags()
 // 跳转到指定位置
 const handleAnchorClick = (anchor: any) => {
   const { lineIndex } = anchor
@@ -373,10 +389,11 @@ async function getCatalog() {
   }))
 }
 
+// 获取评论
 function getListComment() {
-  getComment(route.params.id).then((res) => {
-    commentCount.value = res.data.data.commentCount
-    const array = res.data.data.commentTrees
+  getByArticleId(commentQueryParams.value).then((res) => {
+    commentCount.value = res.data.total
+    const array = res.data.records
     for (let i = 0; i < array.length; i++) {
       ;(array[i] as any).replyInputShow = false
     }
@@ -387,20 +404,24 @@ function getListComment() {
 
 function submitComments(val: any) {
   const data: any = {
-    parentId: val.parentId,
+    toId: val.toId,
     articleId: val.articleId,
-    content: val.content
+    content: val.content,
+    source: 'ARTICLE'
   }
   addComment(data).then((res: any) => {
     getListComment()
-    ElMessage.success(res.data.msg)
+    ElMessage.success(res.message)
   })
 }
 
 function vanishDelete(val: any) {
-  deleteComment(val.id).then((res) => {
+  const data: any = {
+    id: val.id
+  }
+  deleteComment(data).then((res) => {
     getListComment()
-    ElMessage.success(res.data.msg)
+    ElMessage.success(res.message)
   })
 }
 

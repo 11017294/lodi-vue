@@ -201,7 +201,7 @@ export default {
      */
     getCategory() {
       listCategory().then((response) => {
-        this.CategoryList = response.data.data
+        this.CategoryList = response.data
       })
     },
     /**
@@ -209,14 +209,14 @@ export default {
      */
     getTags() {
       listTag().then((response) => {
-        this.TagsList = response.data.data
+        this.TagsList = response.data
       })
     },
     getArticle() {
       const { id } = this.$route.query
       if (id) {
         getArticleByTagId(id).then((response) => {
-          this.form = response.data.data
+          this.form = response.data
           this.title = this.form.title
         })
       }
@@ -224,8 +224,8 @@ export default {
     // 随机照片
     randomImg() {
       // getBingWallpaper().then((response) => {
-      //   this.form.cover = response.data.data
-      //   this.$message.success(response.data.msg)
+      //   this.form.cover = response.data
+      //   this.$message.success(response.message)
       // })
     },
     // 覆盖默认的上传行为
@@ -248,8 +248,8 @@ export default {
       // 文件对象
       form.append('file', file)
       uploadImage(form).then((response) => {
-        this.$message.success(response.data.msg)
-        this.form.cover = response.data.data
+        this.$message.success(response.message)
+        this.form.cover = response.data
       })
     },
     // 绑定@imgAdd event
@@ -258,13 +258,13 @@ export default {
       const data = new FormData()
       data.append('file', $file)
       uploadImage(data).then((response) => {
-        this.$message.success(response.data.msg)
+        this.$message.success(response.message)
         /**
          * $vm 指为mavonEditor实例，可以通过如下两种方式获取
          * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
          * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
          */
-        this.$refs.md.$img2Url(pos, response.data.data)
+        this.$refs.md.$img2Url(pos, response.data)
       })
     },
     // 删除图片
@@ -272,7 +272,7 @@ export default {
       const name = filename[0].split('/')
       const fileName = name[name.length - 1]
       deleteImage(fileName).then((response) => {
-        this.$message.success(response.data.msg)
+        this.$message.success(response.message)
       })
     },
     /** 提交按钮 */

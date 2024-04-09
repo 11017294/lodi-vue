@@ -30,7 +30,7 @@
 <!--  if (currentPage?.value + 1 <= a) {-->
 <!--    currentPage?.value = 1 + currentPage?.value-->
 <!--    listArticles(queryParams.value).then((response) => {-->
-<!--      dataList.value = [...dataList.value, ...response.data.data.records]-->
+<!--      dataList.value = [...dataList.value, ...response.data.records]-->
 <!--    })-->
 <!--  }-->
 <!--}-->

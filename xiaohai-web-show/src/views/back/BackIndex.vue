@@ -66,8 +66,8 @@ const { queryParams } = toRefs(data)
 /** 查询归档列表 */
 function getList() {
   listBack(queryParams.value).then((response) => {
-    dataList.value = response.data.data.records
-    total.value = response.data.data.total
+    dataList.value = response.data.records
+    total.value = response.data.total
   })
 }
 

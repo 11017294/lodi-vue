@@ -41,7 +41,7 @@ const config = ref({
 
 function getListComment() {
   getComment(0).then((res) => {
-    const array = res.data.data.commentTrees
+    const array = res.data.commentTrees
     for (let i = 0; i < array.length; i++) {
       ;(array[i] as any).replyInputShow = false
     }
@@ -57,13 +57,13 @@ function submitComments(val: any) {
   }
   addComment(data).then((res: any) => {
     getListComment()
-    ElMessage.success(res.data.msg)
+    ElMessage.success(res.message)
   })
 }
 function vanishDelete(val: any) {
   deleteComment(val.id).then((res) => {
     getListComment()
-    ElMessage.success(res.data.msg)
+    ElMessage.success(res.message)
   })
 }
 

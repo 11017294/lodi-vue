@@ -5,7 +5,9 @@ import { listArticles, getArticleByCategoryId } from '@/api/show'
 
 import articleList from '@/components/articleList/index.vue'
 import { getArticle, image } from '@/utils/publicMethods'
+import useStore from '@/store'
 
+const store = useStore()
 // 轮播列表
 const carouselList: any = ref([])
 
@@ -18,7 +20,8 @@ const loadMores = ref(true)
 // 是否展开分类
 const classify = ref(false)
 // 分类列表
-const categories = ref([])
+const { categories } = store
+
 // 表示选中的全部按钮
 const selectedButton = ref(null)
 
@@ -39,7 +42,7 @@ function getCarouselList() {
   queryParams.value.currentPage = 1
   queryParams.value.pageSize = 3
   listArticles(queryParams.value).then((response) => {
-    carouselList.value = response.data.data.records
+    carouselList.value = response.data.records
   })
 }
 
@@ -48,8 +51,8 @@ function getList() {
   queryParams.value.currentPage = 1
   queryParams.value.pageSize = 10
   listArticles(queryParams.value).then((response) => {
-    dataList.value = response.data.data.records
-    total.value = response.data.data.total
+    dataList.value = response.data.records
+    total.value = response.data.total
     const a = Math.ceil(total.value / queryParams.value.pageSize)
     loadMores.value = queryParams.value.currentPage + 1 <= a
   })
@@ -60,8 +63,8 @@ function getListByCategoryId(id: any) {
   queryParams.value.currentPage = 1
   queryParams.value.pageSize = 10
   getArticleByCategoryId(queryParams.value).then((response) => {
-    dataList.value = response.data.data.records
-    total.value = response.data.data.total
+    dataList.value = response.data.records
+    total.value = response.data.total
     const a = Math.ceil(total.value / queryParams.value.pageSize)
     loadMores.value = queryParams.value.currentPage + 1 <= a
   })
@@ -79,7 +82,7 @@ function loadMore() {
   if (queryParams.value.currentPage + 1 <= a) {
     queryParams.value.currentPage = 1 + queryParams.value.currentPage
     listArticles(queryParams.value).then((response) => {
-      dataList.value = [...dataList.value, ...response.data.data.records]
+      dataList.value = [...dataList.value, ...response.data.records]
     })
   }
 }

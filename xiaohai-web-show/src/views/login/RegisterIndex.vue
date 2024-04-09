@@ -207,7 +207,7 @@ export default {
         const formData = new FormData()
         formData.append('email', this.registerForm.email)
         sendEmailCode(formData).then((res) => {
-          if (res.data.data) {
+          if (res.data) {
             this.$message.success('发送成功')
           }
         })
@@ -235,7 +235,7 @@ export default {
         this.loading = true
         register(this.registerForm)
           .then((res) => {
-            if (res.data.data) {
+            if (res.data) {
               this.$message.success('注册成功')
               this.$router.push('/login')
             } else {

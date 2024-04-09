@@ -95,8 +95,8 @@ watch(
       queryParams.value.keywords = data.keywords
       queryParams.value.currentPage = 1
       getSearch(queryParams.value).then((res) => {
-        data.articleList = res.data.data.records
-        total.value = res.data.data.total
+        data.articleList = res.data.records
+        total.value = res.data.total
         const a = Math.ceil(total.value / queryParams.value.pageSize)
         loadMores.value = queryParams.value.currentPage + 1 <= a
       })
@@ -115,7 +115,7 @@ function loadMore() {
   if (queryParams.value.currentPage + 1 <= a) {
     queryParams.value.currentPage = 1 + queryParams.value.currentPage
     getSearch(queryParams.value).then((response) => {
-      data.articleList = [...data.articleList, ...(response.data.data.records as [])]
+      data.articleList = [...data.articleList, ...(response.data.records as [])]
     })
   }
 }

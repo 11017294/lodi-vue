@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { getToken, removeToken, setToken } from '@/utils/auth'
-import {findShowBasic, friendLink, hotArticles, listCategory, listTag} from '@/api/show'
+import { findShowBasic, friendLink, hotArticles, listCategory, listTag } from '@/api/show'
 import { image } from '@/utils/publicMethods'
 import { getInfo, login, logout } from '@/api/auth'
+import {ElMessage} from "element-plus";
 
 const useStore = defineStore('user', {
   state: () => {
@@ -31,10 +32,11 @@ const useStore = defineStore('user', {
     login(userInfo: any) {
       return new Promise((resolve, reject) => {
         login(userInfo)
-          .then((response) => {
-            const { data, message } = response.data
+          .then((respons) => {
+            const { data, message } = respons
             if (data == null) {
-              return reject(message)
+              ElMessage.error(message)
+              return
             }
             this.token = data
             setToken(data)
@@ -50,9 +52,10 @@ const useStore = defineStore('user', {
       return new Promise((resolve, reject) => {
         getInfo()
           .then((response) => {
-            const { data } = response.data
+            const { data } = response
             if (data == null) {
-              return reject('验证失败，请重新登录。')
+              ElMessage.error('验证失败，请重新登录。')
+              return
             }
             const { username, nickname, userAvatar, id, summary, gitee, github, qqNumber, weChat } =
               data
@@ -90,8 +93,8 @@ const useStore = defineStore('user', {
       return new Promise<void>((resolve, reject) => {
         findShowBasic()
           .then((response) => {
-            this.showBasic = response.data.data
-            // this.website = response.data.data.website
+            this.showBasic = response.data
+            // this.website = response.data.website
             document.title = this.website.title
             // 获取指定 meta 标签
             const descriptionMeta = document.querySelector('meta[name="description"]')
@@ -122,7 +125,7 @@ const useStore = defineStore('user', {
       return new Promise<void>((resolve, reject) => {
         listTag()
           .then((response) => {
-            this.tags = response.data.data
+            this.tags = response.data
             resolve()
           })
           .catch((error) => {
@@ -135,7 +138,7 @@ const useStore = defineStore('user', {
       return new Promise<void>((resolve, reject) => {
         listCategory()
           .then((response) => {
-            this.categories = response.data.data
+            this.categories = response.data
             resolve()
           })
           .catch((error) => {
@@ -148,7 +151,7 @@ const useStore = defineStore('user', {
       return new Promise<void>((resolve, reject) => {
         friendLink()
           .then((response) => {
-            this.friendLinkList = response.data.data
+            this.friendLinkList = response.data
             resolve()
           })
           .catch((error) => {
@@ -161,7 +164,7 @@ const useStore = defineStore('user', {
       return new Promise<void>((resolve, reject) => {
         hotArticles()
           .then((response) => {
-            this.hotArticles = response.data.data.records
+            this.hotArticles = response.data.records
             resolve()
           })
           .catch((error) => {

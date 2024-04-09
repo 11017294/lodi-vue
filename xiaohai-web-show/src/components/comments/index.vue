@@ -16,7 +16,7 @@
     <h3 class="flex-center">{{ listValue }}</h3>
     <div class="dataList" v-for="(item, index) in dataList" :key="index">
       <div class="headProtrait">
-        <img :src="image(item.avatar)" />
+        <img :src="image(item.userAvatar)" />
       </div>
       <div class="dataListRight">
         <div class="title">
@@ -37,14 +37,14 @@
           :placeholderValue="placeholderValue"
           :btnValue="btnValue"
           :articleId="articleId"
-          :parentId="item.id"
+          :toId="item.id"
           @getListComment="getListComment"
           @submitComments="submitComments"
         ></comments-input>
 
-        <div v-for="(i, k) in item.commentTrees" :key="k" class="dataList">
+        <div v-for="(i, k) in item.children" :key="k" class="dataList">
           <div class="headProtrait">
-            <img :src="image(i.avatar)" />
+            <img :src="image(i.userAvatar)" />
           </div>
           <div class="dataListRight">
             <div class="titleChild">
@@ -54,7 +54,7 @@
               </div>
             </div>
             <div class="content">
-              <span>@{{ i.replyUsername }}</span> <span v-html="parseEmojis(i.content)"></span>
+              <span>@{{ i.toUsername }}</span> <span v-html="parseEmojis(i.content)"></span>
             </div>
             <div class="listOperation">
               <div class="replyBtn" @click="replyChildClick(i)">
@@ -69,7 +69,7 @@
               :placeholderValue="placeholderValue"
               :btnValue="btnValue"
               :articleId="articleId"
-              :parentId="i.id"
+              :toId="i.id"
               @getListComment="getListComment"
               @submitComments="submitComments"
             ></comments-input>

@@ -1,6 +1,13 @@
 <template>
   <div class="commentInput">
-    <el-input v-model="content" :rows="4" type="textarea" :placeholder="placeholderValue" />
+    <el-input
+      v-model="content"
+      :rows="4"
+      type="textarea"
+      maxlength="2048"
+      show-word-limit
+      :placeholder="placeholderValue"
+    />
     <div class="opertionBtn">
       <el-popover placement="bottom" :width="340" trigger="hover">
         <template #reference>
@@ -41,7 +48,7 @@ const props = defineProps({
     type: String,
     default: '发表评论'
   },
-  parentId: {
+  toId: {
     type: Number,
     default: null
   },
@@ -51,13 +58,13 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['getListComment', 'submitComments'])
-const { placeholderValue, btnValue, parentId, articleId } = toRefs(props)
+const { placeholderValue, btnValue, toId, articleId } = toRefs(props)
 function selectEmoji(val: any) {
   content.value += val
 }
 function submit() {
   const data: any = {
-    parentId: parentId.value,
+    toId: toId.value,
     articleId: articleId.value,
     content: content.value
   }

@@ -62,8 +62,8 @@ function getList(val: any) {
   queryParams.value.currentPage = 1
   queryParams.value.pageSize = 10
   getArticleByCategoryId(queryParams.value).then((response) => {
-    dataList.value = response.data.data.records
-    total.value = response.data.data.total
+    dataList.value = response.data.records
+    total.value = response.data.total
     const a = Math.ceil(total.value / queryParams.value.pageSize)
     loadMores.value = queryParams.value.currentPage + 1 <= a
   })
@@ -87,7 +87,7 @@ function loadMore() {
   if (queryParams.value.currentPage + 1 <= a) {
     queryParams.value.currentPage = 1 + queryParams.value.currentPage
     getArticleByCategoryId(queryParams.value).then((response) => {
-      dataList.value = [...dataList.value, ...response.data.data.records]
+      dataList.value = [...dataList.value, ...response.data.records]
     })
   }
 }

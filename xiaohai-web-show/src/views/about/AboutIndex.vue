@@ -18,7 +18,6 @@
 import { ref } from 'vue'
 import RightSide from '@/components/layouts/RightSide.vue'
 import useStore from '@/store/index'
-import { markdownImageFile } from '@/utils/publicMethods'
 
 const store = useStore()
 // 关于信息
@@ -27,10 +26,7 @@ const content = ref<any>('')
 const website = ref<any>(store.website)
 function getContent() {
   // 文章内图片地址替换
-  content.value = website.value.content.replaceAll(
-    markdownImageFile(''),
-    `${import.meta.env.VITE_APP_BASE_API_FILE}${markdownImageFile('')}`
-  )
+  content.value = website.value.content
 }
 getContent()
 </script>

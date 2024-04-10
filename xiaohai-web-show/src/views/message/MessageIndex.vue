@@ -25,10 +25,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Comment } from '@element-plus/icons-vue'
 import comments from '@/components/comments/index.vue'
 import RightSide from '@/components/layouts/RightSide.vue'
-import { deleteComment, getComment } from '@/api/show'
-import { addComment } from '@/api/user'
+import { addComment, deleteComment, getCommentTree } from '@/api/comment'
 
 const headValue = ref('')
 const listValue = ref('全部留言')
@@ -39,9 +39,16 @@ const config = ref({
   articleId: '0'
 })
 
+const queryParams = ref({
+  currentPage: 1,
+  pageSize: 10,
+  source: 'MESSAGE_BOARD'
+})
+
+// 获取评论
 function getListComment() {
-  getComment(0).then((res) => {
-    const array = res.data.commentTrees
+  getCommentTree(queryParams.value).then((res) => {
+    const array = res.data.records
     for (let i = 0; i < array.length; i++) {
       ;(array[i] as any).replyInputShow = false
     }
@@ -49,19 +56,25 @@ function getListComment() {
     config.value.disabled = true
   })
 }
+// 评论
 function submitComments(val: any) {
   const data: any = {
-    parentId: val.parentId,
-    articleId: val.articleId,
-    content: val.content
+    toId: val.toId,
+    content: val.content,
+    source: 'MESSAGE_BOARD'
   }
   addComment(data).then((res: any) => {
     getListComment()
     ElMessage.success(res.message)
   })
 }
+
+// 删除评论
 function vanishDelete(val: any) {
-  deleteComment(val.id).then((res) => {
+  const data: any = {
+    id: val.id
+  }
+  deleteComment(data).then((res: any) => {
     getListComment()
     ElMessage.success(res.message)
   })

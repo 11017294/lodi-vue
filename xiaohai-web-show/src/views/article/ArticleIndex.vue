@@ -251,13 +251,13 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, reactive, ref, toRefs, watch } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { article, articleLike, listArticles } from '@/api/show'
 import comments from '@/components/comments/index.vue'
 import { image } from '@/utils/publicMethods'
-import { getByArticleId, addComment, deleteComment } from '@/api/comment'
+import { addComment, deleteComment, getCommentTree } from '@/api/comment'
 import useStore from '@/store'
 
 // 文章详情
@@ -292,13 +292,11 @@ const dataList = ref([])
 // 评论数
 const commentCount = ref([])
 
-const data = reactive({
-  queryParams: {
-    currentPage: 1,
-    pageSize: 3,
-    type: 6,
-    id: 0
-  }
+const queryParams = ref({
+  currentPage: 1,
+  pageSize: 3,
+  type: 6,
+  id: 0
 })
 const config = ref({
   dataList: [],
@@ -306,19 +304,14 @@ const config = ref({
   articleId: route.params.id
 })
 
-const { queryParams } = toRefs(data)
-
-const commentData = reactive({
-  commentQueryParams: {
-    currentPage: 1,
-    pageSize: 5,
-    articleId: Number(route.params.id)
-  }
+const commentQueryParams = ref({
+  currentPage: 1,
+  pageSize: 5,
+  articleId: Number(route.params.id),
+  source: 'ARTICLE'
 })
 
-const { commentQueryParams } = toRefs(commentData)
-
-/** 查询展示推荐列表 */
+// 查询展示推荐列表
 function getList(categoryId: any) {
   queryParams.value.id = categoryId
   listArticles(queryParams.value).then((response) => {
@@ -331,6 +324,7 @@ function getArticleId(id: any) {
   router.push({ path: `/article/${id}` })
 }
 
+// 点赞
 function clickLike(val: any) {
   const params: any = {
     articleId: val.id,
@@ -391,7 +385,7 @@ async function getCatalog() {
 
 // 获取评论
 function getListComment() {
-  getByArticleId(commentQueryParams.value).then((res) => {
+  getCommentTree(commentQueryParams.value).then((res) => {
     commentCount.value = res.data.total
     const array = res.data.records
     for (let i = 0; i < array.length; i++) {
@@ -402,6 +396,7 @@ function getListComment() {
   })
 }
 
+// 评论
 function submitComments(val: any) {
   const data: any = {
     toId: val.toId,
@@ -415,11 +410,12 @@ function submitComments(val: any) {
   })
 }
 
+// 删除评论
 function vanishDelete(val: any) {
   const data: any = {
     id: val.id
   }
-  deleteComment(data).then((res) => {
+  deleteComment(data).then((res: any) => {
     getListComment()
     ElMessage.success(res.message)
   })
@@ -438,6 +434,7 @@ onBeforeMount(async () => {
   )
   await getCatalog()
 })
+
 getListComment()
 </script>
 

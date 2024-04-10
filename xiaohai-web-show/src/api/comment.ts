@@ -2,10 +2,10 @@ import request from '@/utils/axios'
 
 const api = '/comment'
 
-// 按文章id获取评论
-export const getByArticleId = (data: any) => {
+// 获取评论
+export const getCommentTree = (data: any) => {
   return request({
-    url: `${api}/getByArticleId`,
+    url: `${api}/getCommentTree`,
     method: 'get',
     params: data
   })

@@ -8,7 +8,7 @@
         </div>
         <el-divider />
         <!-- 添加或修改参数配置对话框 -->
-        <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
           <el-row>
             <el-col :span="16">
               <el-row>
@@ -73,23 +73,23 @@
                     >
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="类型" prop="isOriginal">
-                    <el-radio
-                      v-for="(item, index) in isOriginal"
-                      :key="index"
-                      v-model="form.isOriginal"
-                      :label="index"
-                      border
-                      >{{ item }}</el-radio
-                    >
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item v-if="form.isOriginal === 1" label="转载地址" prop="originalUrl">
-                    <el-input v-model="form.originalUrl" placeholder="请输入转载地址" />
-                  </el-form-item>
-                </el-col>
+                <!--                <el-col :span="8">-->
+                <!--                  <el-form-item label="类型" prop="isOriginal">-->
+                <!--                    <el-radio-->
+                <!--                      v-for="(item, index) in isOriginal"-->
+                <!--                      :key="index"-->
+                <!--                      v-model="form.isOriginal"-->
+                <!--                      :label="index"-->
+                <!--                      border-->
+                <!--                      >{{ item }}</el-radio-->
+                <!--                    >-->
+                <!--                  </el-form-item>-->
+                <!--                </el-col>-->
+                <!--                <el-col :span="8">-->
+                <!--                  <el-form-item v-if="form.isOriginal === 1" label="转载地址" prop="originalUrl">-->
+                <!--                    <el-input v-model="form.originalUrl" placeholder="请输入转载地址" />-->
+                <!--                  </el-form-item>-->
+                <!--                </el-col>-->
               </el-row>
             </el-col>
             <el-col :span="8">
@@ -148,160 +148,142 @@
     </div>
   </el-col>
 </template>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { QuestionFilled, UploadFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { article, listCategory, listTag } from '@/api/show'
+import { deleteImage, uploadImage } from '@/api/file'
+import { addArticle, updateArticle } from '@/api/article'
+import router from '@/router'
 
-<script>
-import { InfoFilled, QuestionFilled, UploadFilled } from '@element-plus/icons-vue'
-import { getArticleByTagId, listCategory, listTag } from '@/api/show.ts'
-import { deleteImage, uploadImage } from '@/api/file.ts'
-import { addArticle, updateArticle } from '@/api/article.ts'
-
-export default {
-  name: 'WritingIndex',
-  components: { InfoFilled, QuestionFilled, UploadFilled },
-  data() {
-    return {
-      // 标题
-      title: '新文章',
-      isOriginal: ['原创', '转载'],
-      isPublish: ['草稿', '发布'],
-      // 标签下拉选
-      TagsList: [],
-      // 分类下拉选
-      CategoryList: [],
-      // 表单校验
-      rules: {
-        title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-        summary: [{ required: true, message: '请输入简介', trigger: 'blur' }],
-        categoryId: [{ required: true, message: '分类不能为空', trigger: 'blur' }],
-        tags: [{ required: true, message: '标签不能为空', trigger: 'blur' }],
-        isPublish: [{ required: true, message: '发布不能为空', trigger: 'blur' }],
-        isOriginal: [{ required: true, message: '类型不能为空', trigger: 'blur' }]
-      },
-      form: {
-        id: '',
-        title: '',
-        cover: '',
-        content: '',
-        categoryId: '',
-        tags: [],
-        isPublish: '',
-        isOriginal: '',
-        originalUrl: ''
-      }
-    }
-  },
-  created() {
-    this.getCategory()
-    this.getTags()
-    this.getArticle()
-  },
-  methods: {
-    /**
-     * 查询分类下拉选
-     */
-    getCategory() {
-      listCategory().then((response) => {
-        this.CategoryList = response.data
-      })
-    },
-    /**
-     * 获取标签选择列表
-     */
-    getTags() {
-      listTag().then((response) => {
-        this.TagsList = response.data
-      })
-    },
-    getArticle() {
-      const { id } = this.$route.query
-      if (id) {
-        getArticleByTagId(id).then((response) => {
-          this.form = response.data
-          this.title = this.form.title
-        })
-      }
-    },
-    // 随机照片
-    randomImg() {
-      // getBingWallpaper().then((response) => {
-      //   this.form.cover = response.data
-      //   this.$message.success(response.message)
-      // })
-    },
-    // 覆盖默认的上传行为
-    uploadSectionFile(params) {
-      const { file } = params
-      const fileType = file.type
-      const isImage = fileType.indexOf('image') !== -1
-      const isLt2M = file.size / 1024 / 1024 < 2
-      // 这里常规检验，看项目需求而定
-      if (!isImage) {
-        this.$message.error('只能上传图片格式png、jpg、gif!')
-        return
-      }
-      if (!isLt2M) {
-        this.$message.error('只能上传图片大小小于2M')
-        return
-      }
-      // 根据后台需求数据格式
-      const form = new FormData()
-      // 文件对象
-      form.append('file', file)
-      uploadImage(form).then((response) => {
-        this.$message.success(response.message)
-        this.form.cover = response.data
-      })
-    },
-    // 绑定@imgAdd event
-    imgAdd(pos, $file) {
-      // 第一步.将图片上传到服务器.
-      const data = new FormData()
-      data.append('file', $file)
-      uploadImage(data).then((response) => {
-        this.$message.success(response.message)
-        /**
-         * $vm 指为mavonEditor实例，可以通过如下两种方式获取
-         * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
-         * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
-         */
-        this.$refs.md.$img2Url(pos, response.data)
-      })
-    },
-    // 删除图片
-    imgDel(filename) {
-      const name = filename[0].split('/')
-      const fileName = name[name.length - 1]
-      deleteImage(fileName).then((response) => {
-        this.$message.success(response.message)
-      })
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          if (this.form.cover === '') {
-            this.$message.error('请上传封面')
-            return
-          }
-          if (this.form.content === '') {
-            this.$message.error('请填写文章内容')
-            return
-          }
-          if (this.form.id !== '') {
-            updateArticle(this.form).then((response) => {
-              this.$message.success(response.msg)
-              this.$router.push('/writing')
-            })
-          } else {
-            addArticle(this.form).then((response) => {
-              this.$message.success(response.msg)
-              this.$router.push('/writing')
-            })
-          }
-        }
-      })
-    }
-  }
+const title = ref('新文章')
+// const isOriginal = ref(['原创', '转载'])
+const isPublish = ref(['草稿', '发布'])
+const formRef = ref()
+const TagsList = ref<any[]>([])
+const CategoryList = ref<any[]>([])
+const rules = {
+  title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+  summary: [{ required: true, message: '请输入简介', trigger: 'blur' }],
+  categoryId: [{ required: true, message: '分类不能为空', trigger: 'blur' }],
+  tags: [{ required: true, message: '标签不能为空', trigger: 'blur' }],
+  isPublish: [{ required: true, message: '发布不能为空', trigger: 'blur' }]
+  // isOriginal: [{ required: true, message: '类型不能为空', trigger: 'blur' }]
 }
+const form = ref({
+  id: null,
+  title: '',
+  cover: '',
+  content: '',
+  categoryId: null,
+  tags: [],
+  isPublish: null,
+  // isOriginal: null,
+  // originalUrl: '',
+  summary: ''
+})
+
+// 获取分类
+const getCategory = () => {
+  listCategory().then((response: any) => {
+    CategoryList.value = response.data
+  })
+}
+
+// 获取标签
+const getTags = () => {
+  listTag().then((response: any) => {
+    TagsList.value = response.data
+  })
+}
+
+// 获取文章
+const getArticle = () => {
+  const { id } = router.currentRoute.value.query
+  if (!id) {
+    return
+  }
+  article(id).then((response: any) => {
+    form.value = response.data
+    title.value = form.value.title
+  })
+}
+
+// 随机图片
+const randomImg = () => {
+  // getBingWallpaper().then((response) => {
+  //   form.cover = response.data;
+  //   this.$message.success(response.message);
+  // });
+}
+
+// 上传图片
+const uploadSectionFile = (params: any) => {
+  const { file } = params
+  const fileType = file.type
+  const isImage = fileType.indexOf('image') !== -1
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isImage) {
+    ElMessage.error('只能上传图片格式png、jpg、gif!')
+    return
+  }
+  if (!isLt2M) {
+    ElMessage.error('只能上传图片大小小于2M')
+    return
+  }
+  const formParams = new FormData()
+  formParams.append('file', file)
+  uploadImage(formParams).then((response: any) => {
+    form.value.cover = response.data
+  })
+}
+
+// 添加图片
+const imgAdd = (pos: any, $file: any) => {
+  const data = new FormData()
+  data.append('file', $file)
+  uploadImage(data).then((response: any) => {
+    // this.$refs.md.$img2Url(pos, response.data);
+  })
+}
+
+// 删除图片
+const imgDel = (filename: any) => {
+  const name = filename[0].split('/')
+  const fileName = name[name.length - 1]
+  deleteImage(fileName).then(() => {})
+}
+
+// 提交表单
+const submitForm = () => {
+  formRef.value.validate((valid: boolean) => {
+    if (!valid) {
+      return
+    }
+    if (form.value.cover === '') {
+      ElMessage.error('请上传封面')
+      return
+    }
+    if (form.value.content === '') {
+      ElMessage.error('请填写文章内容')
+      return
+    }
+    if (form.value.id === null) {
+      addArticle(form.value).then(() => {
+        ElMessage.success('发布成功')
+      })
+    } else {
+      updateArticle(form.value).then(() => {
+        ElMessage.success('修改成功')
+      })
+    }
+    router.push('/')
+  })
+}
+
+getArticle()
+getCategory()
+getTags()
 </script>
 <style scoped></style>

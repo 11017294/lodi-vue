@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="loginPart">
-      <el-form auto-complete="on" label-position="left">
+      <el-form label-position="left" ref="formRef" :model="loginForm" :rules="rules">
         <h2>登 录</h2>
         <el-form-item prop="username" class="inputNew">
           <el-input
@@ -50,57 +50,63 @@
         </el-button>
       </el-form>
       <div style="text-align: right; color: white">
-        <el-link type="warning" @click="registerClick()">没有账号？去注册</el-link>
+        <router-link to="/register">
+          <el-link type="warning">没有账号？去注册</el-link>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import useStore from '@/store'
 
 const store = useStore()
 
-const data = reactive({
-  loginForm: {
-    username: '',
-    password: '',
-    loginType: 'password',
-    rememberMe: false
-  }
+const loginForm = ref({
+  username: '',
+  password: '',
+  loginType: 'password',
+  rememberMe: false
 })
 
-const { loginForm } = toRefs(data)
 const router = useRouter()
 
 const loading = ref(false)
 const redirect = ref(router.currentRoute.value.query)
 const show = ref()
+const formRef = ref()
+
+// 表单验证规则
+const rules = {
+  username: [{ required: true, message: '请输入您的用户名', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入您的密码', trigger: 'blur' }]
+}
 
 // 登录函数
 const handleLogin = async () => {
-  loading.value = true
-  store
-    .login(loginForm.value)
-    .then(() => {
-      if (show.value) {
-        window.open(show.value, '_self')
-      } else {
-        router.push({ path: redirect.value.show || '/' })
-      }
-      loading.value = false
-    })
-    .catch(() => {
-      loading.value = false
-    })
-  loading.value = false
-}
-
-// 跳转注册
-const registerClick = () => {
-  router.push('/register')
+  formRef.value.validate((valid: boolean) => {
+    if (!valid) {
+      return
+    }
+    loading.value = true
+    store
+      .login(loginForm.value)
+      .then(() => {
+        if (show.value) {
+          window.open(show.value, '_self')
+        } else {
+          router.push({ path: redirect.value.show || '/' })
+        }
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
+    loading.value = false
+  })
 }
 </script>
 

@@ -2,7 +2,7 @@
   <div class="register-container">
     <div class="registerPart">
       <el-form
-        ref="registerForm"
+        ref="formRef"
         :model="registerForm"
         :rules="registerRules"
         auto-complete="on"
@@ -65,7 +65,7 @@
             ref="password"
             v-model="registerForm.password"
             name="password"
-            type="password"
+            show-password
             placeholder="密码"
             auto-complete="on"
             tabindex="4"
@@ -79,7 +79,7 @@
           <el-input
             ref="confirmPassword"
             v-model="registerForm.confirmPassword"
-            type="password"
+            show-password
             placeholder="确认密码"
             auto-complete="on"
             tabindex="5"
@@ -127,128 +127,111 @@
     />
   </div>
 </template>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { register, sendEmailCode } from '@/api/auth'
 
-<script>
-import { register, sendEmailCode } from '@/api/auth.ts'
+const count = ref('')
+const timer = ref<NodeJS.Timeout | null>(null)
+const loading = ref(false)
+const captchaEnabled = ref(true)
 
-export default {
-  name: 'RegisterIndex',
-  data() {
-    // 验证是否相同
-    const equalToPassword = (rule, value, callback) => {
-      if (this.registerForm.password !== value) {
-        callback(new Error('两次输入的密码不一致'))
-      } else {
-        callback()
-      }
-    }
-    // 邮箱验证
-    const validateEmail = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请正确填写邮箱'))
-      } else {
-        if (value !== '') {
-          const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-          if (!reg.test(value)) {
-            callback(new Error('请输入有效的邮箱'))
-          }
-        }
-        callback()
-      }
-    }
+const formRef = ref()
+const router = useRouter()
 
-    return {
-      count: '',
-      timer: null,
-      captchaEnabled: true,
-      registerForm: {
-        username: '',
-        password: '',
-        confirmPassword: '',
-        code: '',
-        email: ''
-      },
-      registerRules: {
-        username: [
-          { required: true, trigger: 'blur', message: '请输入您的账号' },
-          { min: 2, max: 20, message: '用户账号长度必须介于 2 和 20 之间', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, trigger: 'blur', message: '请输入您的密码' },
-          { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
-        ],
-        confirmPassword: [
-          { required: true, trigger: 'blur', message: '请再次输入您的密码' },
-          { required: true, validator: equalToPassword, trigger: 'blur' }
-        ],
-        code: [{ required: true, trigger: 'blur', message: '请输入验证码' }],
-        email: [{ validator: validateEmail, trigger: 'blur' }]
-      },
-      loading: false,
-      redirect: undefined
-    }
-  },
-  watch: {
-    $route: {
-      handler(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
-  },
-  created() {},
-  methods: {
-    // 获取邮箱验证码
-    getCode() {
-      this.$refs.registerForm.validateField('email', (val) => {
-        if (!val) {
-          return false
-        }
-        const formData = new FormData()
-        formData.append('email', this.registerForm.email)
-        sendEmailCode(formData).then((res) => {
-          if (res.data) {
-            this.$message.success('发送成功')
-          }
-        })
-        const TIME_COUNT = 60
-        if (!this.timer) {
-          this.count = TIME_COUNT
-          this.captchaEnabled = false
-          this.timer = setInterval(() => {
-            if (this.count > 0 && this.count <= TIME_COUNT) {
-              this.count--
-            } else {
-              this.captchaEnabled = true
-              clearInterval(this.timer)
-              this.timer = null
-            }
-          }, 1000)
-        }
-      })
-    },
-    handleRegister() {
-      this.$refs.registerForm.validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        this.loading = true
-        register(this.registerForm)
-          .then((res) => {
-            if (res.data) {
-              this.$message.success('注册成功')
-              this.$router.push('/login')
-            } else {
-              this.$message.error(res.data.message)
-            }
-            this.loading = false
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
-    }
+const registerForm = ref({
+  username: '',
+  password: '',
+  confirmPassword: '',
+  code: '',
+  email: ''
+})
+
+// 验证是否相同
+const equalToPassword = (rule: any, value: string, callback: any) => {
+  if (registerForm.value.password !== value) {
+    callback(new Error('两次输入的密码不一致'))
+  } else {
+    callback()
   }
+}
+
+// 邮箱验证
+const validateEmail = (rule: any, value: string, callback: any) => {
+  if (value === '') {
+    callback(new Error('请正确填写邮箱'))
+  } else {
+    if (value !== '') {
+      const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+      if (!reg.test(value)) {
+        callback(new Error('请输入有效的邮箱'))
+      }
+    }
+    callback()
+  }
+}
+
+// 获取邮箱验证码
+const getCode = () => {
+  formRef.value.validateField('email', (val: boolean) => {
+    if (!val) {
+      return
+    }
+    const formData = new FormData()
+    formData.append('email', registerForm.value.email)
+    sendEmailCode(formData).then(() => {})
+    const TIME_COUNT = 60
+    if (!timer.value) {
+      count.value = TIME_COUNT.toString()
+      captchaEnabled.value = false
+      timer.value = setInterval(() => {
+        if (Number(count.value) > 0 && Number(count.value) <= TIME_COUNT) {
+          count.value = (Number(count.value) - 1).toString()
+        } else {
+          captchaEnabled.value = true
+          clearInterval(timer.value!)
+          timer.value = null
+        }
+      }, 1000)
+    }
+  })
+}
+
+// 表单验证规则
+const registerRules = ref({
+  username: [
+    { required: true, trigger: 'blur', message: '请输入您的账号' },
+    { min: 2, max: 20, message: '用户账号长度必须介于 2 和 20 之间', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, trigger: 'blur', message: '请输入您的密码' },
+    { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
+  ],
+  confirmPassword: [
+    { required: true, trigger: 'blur', message: '请再次输入您的密码' },
+    { required: true, validator: equalToPassword, trigger: 'blur' }
+  ],
+  code: [{ required: true, trigger: 'blur', message: '请输入验证码' }],
+  email: [{ validator: validateEmail, trigger: 'blur' }]
+})
+
+// 注册
+const handleRegister = () => {
+  formRef.value.validate((valid: boolean) => {
+    if (!valid) {
+      return
+    }
+    loading.value = true
+    register(registerForm.value)
+      .then(() => {
+        router.push('/login')
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
+  })
 }
 </script>
 

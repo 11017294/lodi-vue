@@ -57,8 +57,8 @@ axios.interceptors.response.use(
       })
     }
     if (res.code !== 0) {
-      // ElMessage.error(`Code: ${response.status}, Message: ${res.message}`)
-      Promise.reject(new Error(res.message || 'Error'))
+      ElMessage.error(res.message || 'Error')
+      return Promise.reject(res.message || 'Error')
     }
     return res
   },

@@ -80,6 +80,16 @@
         @submitComments="submitComments"
         @vanishDelete="vanishDelete"
       ></comments>
+      <el-space
+        class="hidden-sm-and-down"
+        direction="vertical"
+        fill
+        size="large"
+        style="display: flex"
+      >
+        <el-button v-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
+        <el-button v-else text disabled>没有更多了</el-button>
+      </el-space>
     </el-card>
   </el-col>
   <!--手机端-->
@@ -167,6 +177,16 @@
       @submitComments="submitComments"
       @vanishDelete="vanishDelete"
     ></comments>
+    <el-space
+      class="hidden-sm-and-down"
+      direction="vertical"
+      fill
+      size="large"
+      style="display: flex"
+    >
+      <el-button v-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
+      <el-button v-else text disabled>没有更多了</el-button>
+    </el-space>
   </el-card>
   <!--右内容区-->
   <el-col class="hidden-md-and-down" :lg="6" :xl="5">
@@ -259,6 +279,7 @@ import comments from '@/components/comments/index.vue'
 import { image } from '@/utils/publicMethods'
 import { addComment, deleteComment, getCommentTree } from '@/api/comment'
 import useStore from '@/store'
+import {AxiosResponse} from "axios";
 
 // 文章详情
 const articleOne = ref({
@@ -290,7 +311,9 @@ const { tags } = store
 // 展示文章列表
 const dataList = ref([])
 // 评论数
-const commentCount = ref([])
+const commentCount = ref()
+// 是否展示加载更多
+const loadMores = ref(true)
 
 const queryParams = ref({
   currentPage: 1,
@@ -383,10 +406,26 @@ async function getCatalog() {
   }))
 }
 
+// 加载更多
+function loadMore() {
+  const a = Math.ceil(commentCount.value / commentQueryParams.value.pageSize)
+  if (commentQueryParams.value.currentPage + 1 >= a) {
+    loadMores.value = false
+  }
+  if (commentQueryParams.value.currentPage + 1 <= a) {
+    commentQueryParams.value.currentPage = 1 + commentQueryParams.value.currentPage
+    getCommentTree(commentQueryParams.value).then((res) => {
+      config.value.dataList = [...config.value.dataList, ...(res.data.records as [])]
+    })
+  }
+}
+
 // 获取评论
 function getListComment() {
   getCommentTree(commentQueryParams.value).then((res) => {
     commentCount.value = res.data.total
+    const a = Math.ceil(commentCount.value / queryParams.value.pageSize)
+    loadMores.value = queryParams.value.currentPage + 1 <= a
     const array = res.data.records
     for (let i = 0; i < array.length; i++) {
       ;(array[i] as any).replyInputShow = false

@@ -13,8 +13,18 @@
         @getListComment="getListComment"
         @submitComments="submitComments"
         @vanishDelete="vanishDelete"
-      ></comments
-    ></el-card>
+      ></comments>
+      <el-space
+        class="hidden-sm-and-down"
+        direction="vertical"
+        fill
+        size="large"
+        style="display: flex"
+      >
+        <el-button v-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
+        <el-button v-else text disabled>没有更多了</el-button>
+      </el-space>
+    </el-card>
   </el-col>
   <!--右内容区-->
   <el-col class="hidden-md-and-down" :lg="6" :xl="5">
@@ -32,6 +42,10 @@ import { addComment, deleteComment, getCommentTree } from '@/api/comment'
 
 const headValue = ref('')
 const listValue = ref('全部留言')
+// 评论数
+const commentCount = ref()
+// 是否展示加载更多
+const loadMores = ref(true)
 
 const config = ref({
   dataList: [],
@@ -45,9 +59,26 @@ const queryParams = ref({
   source: 'MESSAGE_BOARD'
 })
 
+// 加载更多
+function loadMore() {
+  const a = Math.ceil(commentCount.value / queryParams.value.pageSize)
+  if (queryParams.value.currentPage + 1 >= a) {
+    loadMores.value = false
+  }
+  if (queryParams.value.currentPage + 1 <= a) {
+    queryParams.value.currentPage = 1 + queryParams.value.currentPage
+    getCommentTree(queryParams.value).then((res) => {
+      config.value.dataList = [...config.value.dataList, ...(res.data.records as [])]
+    })
+  }
+}
+
 // 获取评论
 function getListComment() {
   getCommentTree(queryParams.value).then((res) => {
+    commentCount.value = res.data.total
+    const a = Math.ceil(commentCount.value / queryParams.value.pageSize)
+    loadMores.value = queryParams.value.currentPage + 1 <= a
     const array = res.data.records
     for (let i = 0; i < array.length; i++) {
       ;(array[i] as any).replyInputShow = false

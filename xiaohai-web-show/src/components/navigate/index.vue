@@ -93,6 +93,9 @@ watch(
 }
 
 .card-subtitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 12px;
   line-height: 20px;
   color: #999;

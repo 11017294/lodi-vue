@@ -16,6 +16,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/about', component: () => import('@/views/about/AboutIndex.vue') },
       { path: '/article/:id', component: () => import('@/views/article/ArticleIndex.vue') },
       { path: '/login', component: () => import('@/views/login/LoginIndex.vue') },
+      { path: '/navigate', component: () => import('@/views/navigate/NavigateIndex.vue') },
       { path: '/register', component: () => import('@/views/login/RegisterIndex.vue') },
       { path: '/writing', component: () => import('@/views/article/writingIndex.vue') }
     ]

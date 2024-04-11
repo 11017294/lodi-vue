@@ -23,6 +23,10 @@
     <div class="menus-item">
       <router-link class="menu-btn" to="/about"> 关于</router-link>
     </div>
+    <el-divider direction="vertical" />
+    <div class="menus-item">
+      <router-link class="menu-btn" to="/navigate"> 导航</router-link>
+    </div>
     <div>©{{ 2023 }} - {{ new Date().getFullYear() }} By Lodi</div>
     <a href="https://beian.miit.gov.cn/" target="_blank">
       <!--        {{blogInfo.webSite.recordNum}}-->

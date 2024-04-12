@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <div class="loginPart">
+    <el-card class="loginPart">
       <el-form label-position="left" ref="formRef" :model="loginForm" :rules="rules">
         <h2>登 录</h2>
         <el-form-item prop="username" class="inputNew">
@@ -54,7 +54,7 @@
           <el-link type="warning">没有账号？去注册</el-link>
         </router-link>
       </div>
-    </div>
+    </el-card>
   </div>
 </template>
 
@@ -120,47 +120,31 @@ const handleLogin = async () => {
 }
 
 .loginPart {
-  position: absolute;
-  /*定位方式绝对定位absolute*/
+  position: absolute; /*定位方式绝对定位absolute*/
   top: 50%;
-  left: 50%;
-  /*顶和高同时设置50%实现的是同时水平垂直居中效果*/
-  transform: translate(-50%, 30%);
-  /*实现块元素百分比下居中*/
+  left: 50%; /*顶和高同时设置50%实现的是同时水平垂直居中效果*/
+  transform: translate(-50%, 30%); /*实现块元素百分比下居中*/
   width: 500px;
   padding: 30px;
-  background: #ffffff;
-  /*背景颜色为黑色，透明度为0.8*/
-  box-sizing: border-box;
-  /*box-sizing设置盒子模型的解析模式为怪异盒模型，
-  将border和padding划归到width范围内*/
-  box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.3);
-  /*边框阴影  水平阴影0 垂直阴影15px 模糊25px 颜色黑色透明度0.5*/
-  border-radius: 15px;
-  /*边框圆角，四个角均为15px*/
+  box-sizing: border-box; /*box-sizing设置盒子模型的解析模式为怪异盒模型，将border和padding划归到width范围内*/
+  box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.3); /*边框阴影  水平阴影0 垂直阴影15px 模糊25px 颜色黑色透明度0.5*/
+  border-radius: 6px; /*边框圆角，四个角均为6px*/
 }
 
 .loginPart h2 {
   margin: 0 0 40px;
   padding: 0;
-  color: #000000;
-  text-align: center;
-  /*文字居中*/
+  text-align: center; /*文字居中*/
 }
 
 ::v-deep .inputNew .el-input__inner {
   width: 100%;
   font-size: 16px;
-  color: #000000 !important;
-  letter-spacing: 1px;
-  /*字符间的间距1px*/
+  letter-spacing: 1px; /*字符间的间距1px*/
+
   margin: 3px;
   border: none;
-  border-bottom: 1px solid #fff;
-  outline: none;
-  /*outline用于绘制元素周围的线
-  outline：none在这里用途是将输入框的边框的线条使其消失*/
+  outline: none; /*outline用于绘制元素周围的线 outline：none在这里用途是将输入框的边框的线条使其消失*/
   background: transparent !important;
-  /*背景颜色为透明*/
 }
 </style>

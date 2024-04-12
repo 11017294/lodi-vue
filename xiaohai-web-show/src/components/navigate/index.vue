@@ -51,7 +51,7 @@ watch(
   width: 220px;
   margin: 10px;
   transition: transform 0.2s ease-in-out; /* 过度动画 */
-  --el-card-padding: 12px; /* 内间距 */
+  --el-card-padding: 15px; /* 内间距 */
   border-radius: 10px; /* 圆角 */
 }
 
@@ -61,8 +61,8 @@ watch(
   color: #ff6d6d;
 }
 
-.card-content {
-  justify-content: center; /* 在父容器中水平居中 */
+.el-row {
+  justify-content: center;
 }
 
 .card-content a {
@@ -87,6 +87,9 @@ watch(
 }
 
 .card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 14px;
   line-height: 20px;
   font-weight: bold;
@@ -96,6 +99,7 @@ watch(
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 1.175rem;
   font-size: 12px;
   line-height: 20px;
   color: #999;

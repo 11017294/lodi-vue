@@ -195,7 +195,6 @@ import useStore from '@/store/index'
 import { toggleDark, isDark } from '@/utils/dark'
 import SearchModel from '@/components/seach/SearchModel.vue'
 import { open } from '@/utils/publicMethods'
-import writingIndex from '@/views/article/writingIndex.vue'
 
 const store = useStore()
 const router = useRouter()

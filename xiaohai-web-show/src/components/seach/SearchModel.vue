@@ -12,7 +12,7 @@
     <!-- 输入框 -->
 
     <div class="search-input-wrapper">
-      <input v-model="data.keywords" placeholder="输入文章标题或内容..." />
+      <input v-model="data.keyword" placeholder="输入文章标题或内容..." />
       <svg-icon
         icon-class="search"
         class="search-icon"
@@ -31,12 +31,12 @@
           <p class="search-reslut-content" v-html="item.summary" />
         </li>
       </ul>
-      <el-space v-if="data.keywords" direction="vertical" fill size="large" style="display: flex">
+      <el-space v-if="data.keyword" direction="vertical" fill size="large" style="display: flex">
         <el-button v-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
       </el-space>
       <!-- 搜索结果不存在提示 -->
       <div v-show="data.flag && data.articleList.length === 0" style="font-size: 0.875rem">
-        找不到您查询的内容：{{ data.keywords }}
+        找不到您查询的内容：{{ data.keyword }}
       </div>
     </div>
   </el-dialog>
@@ -54,19 +54,19 @@ const loadMores = ref(true)
 const total = ref()
 
 const data = reactive({
-  keywords: '',
+  keyword: '',
   articleList: [],
   flag: false
 })
 function reset() {
-  data.keywords = ''
+  data.keyword = ''
   data.articleList = []
   data.flag = false
 }
 // 请求参数
 const queryData = reactive({
   queryParams: {
-    keywords: '',
+    keyword: '',
     pageSize: 10,
     currentPage: 1
   }
@@ -88,11 +88,11 @@ function isMobile() {
   return clientWidth <= 960
 }
 watch(
-  () => data.keywords,
+  () => data.keyword,
   () => {
-    data.flag = data.keywords.trim() !== ''
+    data.flag = data.keyword.trim() !== ''
     if (data.flag) {
-      queryParams.value.keywords = data.keywords
+      queryParams.value.keyword = data.keyword
       queryParams.value.currentPage = 1
       getSearch(queryParams.value).then((res) => {
         data.articleList = res.data.records

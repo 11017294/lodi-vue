@@ -135,8 +135,8 @@
         <h2 class="text-lg" style="margin: 0"><svg-icon icon-class="link"></svg-icon> 友链</h2>
       </template>
       <el-space wrap size="large">
-        <div v-for="link in store.friendLinkList" :key="link">
-          <el-link :href="link.url" target="_blank">{{ link.name }}</el-link>
+        <div class="friendLink" v-for="link in store.friendLinkList" :key="link">
+          <el-link :href="link.url" target="_blank">{{ link.title }}</el-link>
         </div>
       </el-space>
     </el-card>

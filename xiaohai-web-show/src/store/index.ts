@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
+import { ElMessage } from 'element-plus'
 import { getToken, removeToken, setToken } from '@/utils/auth'
 import { findShowBasic, friendLink, hotArticles, listCategory, listTag } from '@/api/show'
 import { image } from '@/utils/publicMethods'
 import { getInfo, login, logout } from '@/api/auth'
-import {ElMessage} from "element-plus";
 
 const useStore = defineStore('user', {
   state: () => {

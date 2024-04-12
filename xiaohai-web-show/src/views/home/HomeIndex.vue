@@ -40,7 +40,7 @@ const { queryParams } = toRefs(data)
  */
 function getCarouselList() {
   queryParams.value.currentPage = 1
-  queryParams.value.pageSize = 3
+  queryParams.value.pageSize = 5
   listArticles(queryParams.value).then((response) => {
     carouselList.value = response.data.records
   })

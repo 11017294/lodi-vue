@@ -19,15 +19,6 @@ export const listCategory = () => {
   })
 }
 
-// 查询展示文章表列表数据
-export const listArticles = (query: any) => {
-  return request({
-    url: `${api}/getRecommendedArticle`,
-    method: 'get',
-    params: query
-  })
-}
-
 // 根据分类获取文章列表
 export const getArticleByCategoryId = (query: any) => {
   return request({
@@ -46,13 +37,32 @@ export const getArticleByTagId = (query: any) => {
   })
 }
 
+// 获取推荐的文章
+export const listArticles = (query: any) => {
+  return request({
+    url: `${api}/getRecommendedArticle`,
+    method: 'get',
+    params: query
+  })
+}
+
+// 搜索文章
+export const getSearch = (query: any) => {
+  return request({
+    url: `${api}/getArticleBySearch`,
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询热榜文章列表数据
 export const hotArticles = () => {
   return request({
     url: `${api}/getHotArticle`,
     method: 'get',
     params: {
-      currentPage: 1
+      currentPage: 1,
+      pageSize: 5
     }
   })
 }
@@ -75,15 +85,6 @@ export const listBack = (query: any) => {
   })
 }
 
-// 查询文章
-export const getSearch = (query: any) => {
-  return request({
-    url: `${api}/getArticleBySearch`,
-    method: 'get',
-    params: query
-  })
-}
-
 // 站点信息展示
 export const findShowBasic = () => {
   return request({
@@ -91,6 +92,7 @@ export const findShowBasic = () => {
     method: 'get'
   })
 }
+
 export const articleLike = (data: any) => {
   return request({
     url: `${comment}/article-like`,
@@ -98,6 +100,7 @@ export const articleLike = (data: any) => {
     data
   })
 }
+
 // 友情链接
 export const friendLink = () => {
   return request({

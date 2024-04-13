@@ -95,7 +95,7 @@ const useStore = defineStore('user', {
           .then((response) => {
             this.showBasic = response.data
             // this.website = response.data.website
-            document.title = this.website.title
+            // document.title = this.website.title
             // 获取指定 meta 标签
             const descriptionMeta = document.querySelector('meta[name="description"]')
             if (descriptionMeta) {

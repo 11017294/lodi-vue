@@ -10,6 +10,18 @@ export function image(cover: any) {
 }
 
 /**
+ * 网站标题
+ * @param title
+ */
+export function generateTitle(title: any) {
+  if (title) {
+    return `${title} | lodi`
+  }
+  return 'lodi'
+}
+
+
+/**
  * 根据文章id跳转到文章详情页
  * @param id
  */

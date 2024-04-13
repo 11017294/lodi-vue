@@ -130,7 +130,7 @@ getCarouselList()
               @click="getListByCategoryId(category.id)"
             >
               {{ category.name }}
-              <div class="tags">{{ category.clickCount }}</div>
+              <div class="tags">{{ category.articleCount }}</div>
             </el-button>
           </el-space>
           <svg-icon icon-class="spread" class="iconUnfold" @click="classification"></svg-icon>
@@ -149,7 +149,7 @@ getCarouselList()
               @click="getListByCategoryId(category.id)"
             >
               {{ category.name }}
-              <div class="tags">{{ category.clickCount }}</div>
+              <div class="tags">{{ category.articleCount }}</div>
             </el-button>
           </el-space>
           <svg-icon icon-class="pack-up" class="iconUnfold" @click="classification"></svg-icon>
@@ -187,7 +187,7 @@ getCarouselList()
             @click="getListByCategoryId(category.id)"
           >
             {{ category.name }}
-            <div class="tags">{{ category.clickCount }}</div>
+            <div class="tags">{{ category.articleCount }}</div>
           </el-button>
         </el-space>
         <svg-icon icon-class="spread" class="iconUnfold" @click="classification"></svg-icon>
@@ -206,7 +206,7 @@ getCarouselList()
             @click="getListByCategoryId(category.id)"
           >
             {{ category.name }}
-            <div class="tags">{{ category.clickCount }}</div>
+            <div class="tags">{{ category.articleCount }}</div>
           </el-button>
         </el-space>
         <svg-icon icon-class="pack-up" class="iconUnfold" @click="classification"></svg-icon>

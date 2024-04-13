@@ -134,7 +134,7 @@
           <svg-icon icon-class="收藏" /> {{ articleOne.collectCount }}</span
         >
         <span class="text-xs font-number text-color"
-          ><svg-icon icon-class="message" /> {{ commentCount }}</span
+          ><svg-icon icon-class="" /> {{ commentCount }}</span
         >
         <span class="text-xs font-number" @click="clickLike(articleOne)">
           <svg-icon

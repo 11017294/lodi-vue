@@ -10,7 +10,7 @@
         <div v-for="category in store.categories" :key="category.id">
           <el-button text bg size="large" @click="cancelClick(category)">
             <svg-icon icon-class="label-sign"></svg-icon> {{ category.name }}
-            <div class="tags">{{ category.clickCount }}</div>
+            <div class="tags">{{ category.articleCount }}</div>
           </el-button>
         </div>
       </el-space>

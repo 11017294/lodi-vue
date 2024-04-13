@@ -56,7 +56,7 @@
             </el-space>
             <el-space fill direction="vertical" size="small">
               <div class="text-sm text-color">评论</div>
-              <div class="text-xl font-number">{{ showBasic.messageCount }}</div>
+              <div class="text-xl font-number">{{ showBasic.commentCount }}</div>
             </el-space>
           </div>
         </el-space>
@@ -125,7 +125,7 @@
             @click="cancelClick('/tags' + '?id=' + tag.id + '&name=' + tag.name)"
           >
             <svg-icon icon-class="label-sign"></svg-icon> {{ tag.name }}
-            <div class="tags">{{ tag.clickCount }}</div>
+            <div class="tags">{{ tag.articleCount }}</div>
           </el-button>
         </div>
       </el-space>

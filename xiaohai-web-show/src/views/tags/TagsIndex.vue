@@ -79,7 +79,7 @@ if (getQueryVariable('id')) {
         <div v-for="tag in store.tags" :key="tag.id">
           <el-button text bg size="large" @click="cancelClick(tag)">
             <svg-icon icon-class="label-sign"></svg-icon> {{ tag.name }}
-            <div class="tags">{{ tag.clickCount }}</div>
+            <div class="tags">{{ tag.articleCount }}</div>
           </el-button>
         </div>
       </el-space>

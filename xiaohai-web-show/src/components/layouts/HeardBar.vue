@@ -72,6 +72,7 @@
                   <el-dropdown-item @click="adminClick"> 登 录 </el-dropdown-item>
                 </el-dropdown-menu>
                 <el-dropdown-menu v-else>
+                  <el-dropdown-item @click="spaceClick">个人空间</el-dropdown-item>
                   <el-dropdown-item @click="exit">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -221,6 +222,10 @@ function cancelClick(path: any) {
 // 跳转登录
 function adminClick() {
   window.open(`/login?show=${router.currentRoute.value.fullPath}`, '_self')
+}
+
+function spaceClick(){
+  window.open('/space', '_self')
 }
 
 // 登录信息获取

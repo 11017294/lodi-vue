@@ -19,7 +19,8 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/navigate', meta: { title: '导航' }, component: () => import('@/views/navigate/NavigateIndex.vue') },
       { path: '/login', meta: { title: '登录' }, component: () => import('@/views/login/LoginIndex.vue') },
       { path: '/register', meta: { title: '注册' }, component: () => import('@/views/login/RegisterIndex.vue') },
-      { path: '/writing', meta: { title: '创作' }, component: () => import('@/views/article/writingIndex.vue') }
+      { path: '/writing', meta: { title: '创作' }, component: () => import('@/views/article/writingIndex.vue') },
+      { path: '/space', meta: { title: '个人空间' }, component: () => import('@/views/space/SpaceIndex.vue') },
     ]
   }
 ]

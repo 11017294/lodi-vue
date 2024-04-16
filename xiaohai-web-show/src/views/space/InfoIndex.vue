@@ -34,7 +34,7 @@
         style="margin: 0 28px"
         class="edit-form"
       >
-        <el-form-item prop="avatar">
+        <el-form-item label="头像:" prop="userAvatar">
           <el-upload
             class="avatar-uploader"
             action="h"
@@ -59,7 +59,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="邮件通知:" prop="startEmailNotify">
-          <el-switch v-model="editUserInfo.startEmailNotify" :active-value="1" :inactive-value="0" />
+          <el-switch
+            v-model="editUserInfo.startEmailNotify"
+            :active-value="1"
+            :inactive-value="0"
+          />
         </el-form-item>
         <el-form-item label="生日:" prop="birthday">
           <el-date-picker
@@ -155,6 +159,7 @@ const editRules = {
   nickname: [{ required: true, message: '昵称不能为空', trigger: 'blur' }],
   userAvatar: [{ required: true, message: '头像不能为空', trigger: 'blur' }],
   gender: [{ required: true, message: '性别不能为空', trigger: 'blur' }],
+  startEmailNotify: [{ required: true, message: '邮箱通知不能为空', trigger: 'blur' }],
   email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
   summary: [{ required: true, message: '简介不能为空', trigger: 'blur' }],
   birthday: [{ required: true, message: '生日不能为空', trigger: 'blur' }]

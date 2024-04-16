@@ -1,23 +1,20 @@
 import request from '@/utils/axios'
 
-// 退出
-export const logout = () => {
+const api = '/user'
+
+// 修改用户个人信息
+export const updateUserInfo = (data: any) => {
   return request({
-    url: '/logout',
-    method: 'get'
+    url: `${api}/updateUserInfo`,
+    method: 'put',
+    data
   })
 }
-// 获取用户信息
-export const getInfo = () => {
+
+// 上传头像
+export const uploadAvatar = (data: any) => {
   return request({
-    url: '/system/user/info',
-    method: 'get'
-  })
-}
-// 新增评论
-export const addComment = (data: any) => {
-  return request({
-    url: '/note/comment',
+    url: `${api}/uploadAvatar`,
     method: 'post',
     data
   })

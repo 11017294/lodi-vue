@@ -2,14 +2,14 @@
   <div class="space-centered">
     <el-card shadow="never" class="box-top">
       <div class="user-info">
-        <img :src="avatar" alt="User Avatar" class="avatar">
+        <img :src="avatar" alt="User Avatar" class="avatar" />
         <div class="user-details">
           <div class="username">{{ name }}</div>
-          <div class="summary">{{ summary || "这个人很懒，什么都没有留下..." }}</div>
+          <div class="summary">{{ summary || '这个人很懒，什么都没有留下...' }}</div>
         </div>
       </div>
       <div class="navigation">
-        <el-tabs tab-position="bottom" v-model="activeName"  >
+        <el-tabs tab-position="bottom" v-model="activeName">
           <el-tab-pane label="文章" :name="tabName.article"></el-tab-pane>
           <el-tab-pane label="收藏" :name="tabName.collect"></el-tab-pane>
           <el-tab-pane label="评论" :name="tabName.comment"></el-tab-pane>
@@ -35,12 +35,12 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
-import { ref } from "vue";
-import ArticleIndex from "@/views/space/ArticleIndex.vue";
-import CollectIndex from "@/views/space/CollectIndex.vue";
-import CommentIndex from "@/views/space/CommentIndex.vue";
-import InfoIndex from "@/views/space/InfoIndex.vue";
+import { ref } from 'vue'
+import useStore from '@/store'
+import ArticleIndex from '@/views/space/ArticleIndex.vue'
+import CollectIndex from '@/views/space/CollectIndex.vue'
+import CommentIndex from '@/views/space/CommentIndex.vue'
+import InfoIndex from '@/views/space/InfoIndex.vue'
 
 const tabName = ref({
   article: 'article',
@@ -52,7 +52,6 @@ const tabName = ref({
 const activeName = ref(tabName.value.info)
 
 const { name, summary, avatar } = useStore()
-
 </script>
 
 <style scoped>
@@ -62,7 +61,8 @@ const { name, summary, avatar } = useStore()
   align-items: center;
 }
 
-.box-top, .tab-content {
+.box-top,
+.tab-content {
   padding-left: 26px;
   width: 80%;
   max-width: 1200px;
@@ -120,5 +120,4 @@ const { name, summary, avatar } = useStore()
     }
   }
 }
-
 </style>

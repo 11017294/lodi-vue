@@ -20,7 +20,6 @@ export function generateTitle(title: any) {
   return 'lodi'
 }
 
-
 /**
  * 根据文章id跳转到文章详情页
  * @param id
@@ -28,6 +27,15 @@ export function generateTitle(title: any) {
 export function getArticle(id: any) {
   return router.push({ path: `/article/${id}` })
 }
+
+/**
+ * 根据文章id跳转到编辑文章页
+ * @param id
+ */
+export function editArticle(id: any) {
+  return router.push({ path: `/edit/article/${id}` })
+}
+
 // 获取url参数
 export function getQueryVariable(variable: any) {
   const query = window.location.search.substring(1)
@@ -61,6 +69,7 @@ export function open(number: any) {
     center: true
   })
 }
+
 /**
  * 打开QQ
  * @param number

@@ -19,3 +19,12 @@ export const updateArticle = (data: any) => {
     data
   })
 }
+
+// 根据用户id获取文章
+export const getArticleByUserId = (query: any) => {
+  return request({
+    url: `${api}/getArticleByUserId`,
+    method: 'get',
+    params: query
+  })
+}

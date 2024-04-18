@@ -65,6 +65,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/article/writingIndex.vue')
       },
       {
+        path: '/edit/article/:id',
+        meta: { title: '创作' },
+        component: () => import('@/views/article/writingIndex.vue')
+      },
+      {
         path: '/space',
         meta: { title: '个人空间' },
         component: () => import('@/views/space/SpaceIndex.vue')

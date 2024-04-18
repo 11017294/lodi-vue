@@ -152,6 +152,7 @@
 import { ref } from 'vue'
 import { QuestionFilled, UploadFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { useRoute } from 'vue-router'
 import { article, listCategory, listTag } from '@/api/show'
 import { deleteImage, uploadImage } from '@/api/file'
 import { addArticle, updateArticle } from '@/api/article'
@@ -163,6 +164,8 @@ const isPublish = ref(['草稿', '发布'])
 const formRef = ref()
 const TagsList = ref<any[]>([])
 const CategoryList = ref<any[]>([])
+const route = useRoute()
+
 const rules = {
   title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
   summary: [{ required: true, message: '请输入简介', trigger: 'blur' }],
@@ -200,7 +203,7 @@ const getTags = () => {
 
 // 获取文章
 const getArticle = () => {
-  const { id } = router.currentRoute.value.query
+  const { id } = route.params
   if (!id) {
     return
   }

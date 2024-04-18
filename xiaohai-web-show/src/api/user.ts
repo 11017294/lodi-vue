@@ -19,3 +19,12 @@ export const uploadAvatar = (data: any) => {
     data
   })
 }
+
+// 获取用户信息
+export const getUserInfo = (id: any) => {
+  return request({
+    url: `${api}/get`,
+    method: 'get',
+    params: { id }
+  })
+}

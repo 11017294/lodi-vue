@@ -73,6 +73,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/space',
         meta: { title: '个人空间' },
         component: () => import('@/views/space/SpaceIndex.vue')
+      },
+      {
+        path: '/show/space/:id',
+        meta: { title: '个人空间' },
+        component: () => import('@/views/space/SpaceIndex.vue')
       }
     ]
   }

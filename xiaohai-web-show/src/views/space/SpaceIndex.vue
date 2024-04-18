@@ -2,10 +2,10 @@
   <div class="space-centered">
     <el-card shadow="never" class="box-top">
       <div class="user-info">
-        <img :src="avatar" alt="User Avatar" class="avatar" />
+        <img :src="userInfo.userAvatar" alt="User Avatar" class="avatar" />
         <div class="user-details">
-          <div class="username">{{ name }}</div>
-          <div class="summary">{{ summary || '这个人很懒，什么都没有留下...' }}</div>
+          <div class="username">{{ userInfo.nickname }}</div>
+          <div class="summary">{{ userInfo.summary || '这个人很懒，什么都没有留下...' }}</div>
         </div>
       </div>
       <div class="navigation">
@@ -36,11 +36,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useStore from '@/store'
+import { useRoute } from 'vue-router'
 import ArticleIndex from '@/views/space/ArticleIndex.vue'
 import CollectIndex from '@/views/space/CollectIndex.vue'
 import CommentIndex from '@/views/space/CommentIndex.vue'
 import InfoIndex from '@/views/space/InfoIndex.vue'
+import { getUserInfo } from '@/api/user'
+import useStore from '@/store'
+
+const store = useStore()
 
 const tabName = ref({
   article: 'article',
@@ -48,10 +52,19 @@ const tabName = ref({
   comment: 'comment',
   info: 'info'
 })
-
+const route = useRoute()
+const userInfo = ref({})
 const activeName = ref(tabName.value.info)
 
-const { name, summary, avatar } = useStore()
+// 获取用户信息
+function getUser() {
+  const userId = route.params.id || store.userId
+  getUserInfo(userId).then((res) => {
+    userInfo.value = res.data
+  })
+}
+
+getUser()
 </script>
 
 <style scoped>

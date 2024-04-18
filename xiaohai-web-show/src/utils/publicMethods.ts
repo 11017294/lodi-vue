@@ -36,6 +36,11 @@ export function editArticle(id: any) {
   return router.push({ path: `/edit/article/${id}` })
 }
 
+// 查看个人空间
+export function lookSpace(id: any) {
+  return router.push({ path: `/show/space/${id}` })
+}
+
 // 获取url参数
 export function getQueryVariable(variable: any) {
   const query = window.location.search.substring(1)

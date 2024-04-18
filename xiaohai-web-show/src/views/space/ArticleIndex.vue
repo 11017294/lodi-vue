@@ -41,11 +41,15 @@
         style="display: flex; flex-direction: row; margin-top: 10px; justify-content: space-between"
       >
         <el-space alignment="center" size="large">
-          <span v-if="article.nickname" class="text-xs">
-            <el-icon><Avatar /></el-icon>
-            {{ article.nickname }}</span
-          >
-          <span v-else class="text-xs">{{ article.username }}</span>
+          <span class="text-xs font-text text-color"
+            ><el-icon><Avatar /></el-icon>
+            <a @click="lookSpace(article.userId)" v-if="article.nickname" style="cursor: pointer">
+              {{ article.nickname }}
+            </a>
+            <a @click="lookSpace(article.userId)" v-else style="cursor: pointer">
+              {{ article.username }}
+            </a>
+          </span>
           <el-icon><Grid /></el-icon>
           <el-tag size="small">{{ article.categoryName }}</el-tag>
           <span class="text-xs font-text text-color">
@@ -73,7 +77,7 @@
             {{ article.commentCount }}</span
           >
         </el-space>
-        <el-space alignment="center" size="large">
+        <el-space alignment="center" size="large" v-if="store.userId === queryParams.id">
           <div class="operate" style="margin-right: 18px">
             <el-tooltip content="浏览" placement="left">
               <el-button :icon="Search" @click="getArticle(article.id)" circle />
@@ -101,6 +105,7 @@
 import { ref } from 'vue'
 import { Avatar, Delete, Edit, Grid, Open, Search, TurnOff } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useRoute } from 'vue-router'
 import {
   cancelPublishArticle,
   deleteArticle,
@@ -109,11 +114,13 @@ import {
 } from '@/api/article'
 import { editArticle, getArticle, image, lookSpace } from '@/utils/publicMethods'
 import useStore from '@/store'
+import { getUserInfo } from '@/api/user'
 
 const store = useStore()
 
 const loading = ref()
 const dataList = ref({})
+const route = useRoute()
 
 const queryParams = ref({
   currentPage: 1,
@@ -121,9 +128,23 @@ const queryParams = ref({
   id: store.userId
 })
 
+// 获取文章列表
 function getArticleList() {
   getArticleByUserId(queryParams.value).then((res: any) => {
     dataList.value = res.data.records
+  })
+}
+
+// 获取用户信息
+function getUser() {
+  if (route.params.id === store.userId) {
+    getArticleList()
+    return
+  }
+  const userId = route.params.id || store.userId
+  getUserInfo(userId).then((res) => {
+    queryParams.value.id = res.data.id
+    getArticleList()
   })
 }
 
@@ -158,8 +179,7 @@ function privateHandle(id: any) {
     getArticleList()
   })
 }
-
-getArticleList()
+getUser()
 </script>
 
 <style scoped>

@@ -2,7 +2,13 @@
   <div>
     <el-descriptions :column="1" title="个人资料">
       <template #extra>
-        <el-button type="primary" size="small" :icon="Edit" text @click="dialogVisible = true"
+        <el-button
+          type="primary"
+          size="small"
+          :icon="Edit"
+          text
+          @click="dialogVisible = true"
+          v-if="store.userId === userInfo.id"
           >编辑</el-button
         >
       </template>
@@ -25,7 +31,14 @@
       <el-descriptions-item label="注册日期">{{ userInfo.createTime }}</el-descriptions-item>
     </el-descriptions>
     <!--  编辑  -->
-    <el-dialog v-model="dialogVisible" @open="openEdit" @close="closeEdit" title="编辑" width="800">
+    <el-dialog
+      v-model="dialogVisible"
+      @open="openEdit"
+      @close="closeEdit"
+      title="编辑"
+      width="800"
+      v-if="store.userId === userInfo.id"
+    >
       <el-form
         ref="editRef"
         :rules="editRules"
@@ -97,10 +110,14 @@
 import { ref } from 'vue'
 import { Edit, Plus } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { getInfo } from '@/api/auth'
-import { updateUserInfo, uploadAvatar } from '@/api/user'
+import { useRoute } from 'vue-router'
+import { getUserInfo, updateUserInfo, uploadAvatar } from '@/api/user'
+import useStore from '@/store'
 
+const route = useRoute()
 const editRef = ref()
+const dialogVisible = ref(false)
+const store = useStore()
 
 const userInfo = ref({
   id: null,
@@ -126,11 +143,10 @@ const editUserInfo = ref({
   birthday: ''
 })
 
-const dialogVisible = ref(false)
-
 // 获取用户信息
-function getUserInfo() {
-  getInfo().then((res) => {
+function getUser() {
+  const userId = route.params.id || store.userId
+  getUserInfo(userId).then((res) => {
     userInfo.value = res.data
   })
 }
@@ -182,14 +198,14 @@ const editUser = () => {
       return
     }
     updateUserInfo(editUserInfo.value).then(() => {
-      getUserInfo()
+      getUser()
       ElMessage.success('修改成功')
       dialogVisible.value = false
     })
   })
 }
 
-getUserInfo()
+getUser()
 </script>
 
 <style scoped>

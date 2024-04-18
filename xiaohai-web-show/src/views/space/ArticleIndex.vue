@@ -48,12 +48,12 @@
           <span v-else class="text-xs">{{ article.username }}</span>
           <el-icon><Grid /></el-icon>
           <el-tag size="small">{{ article.categoryName }}</el-tag>
-          <span class="text-xs font-number text-color">
+          <span class="text-xs font-text text-color">
             <el-tag size="small" type="info" v-if="article.isPublish === 0">保密</el-tag>
             <el-tag size="small" type="success" v-else-if="article.isPublish === 1">公开</el-tag>
           </span>
-          <span class="text-xs font-number text-color" v-if="article.isPublish === 1">
-            <el-tag size="small" type="info" v-if="article.auditStatus === 0">未审核</el-tag>
+          <span class="text-xs font-text text-color" v-if="article.isPublish === 1">
+            <el-tag size="small" type="warning" v-if="article.auditStatus === 0">待审核</el-tag>
             <el-tag size="small" type="success" v-else-if="article.auditStatus === 1"
               >审核通过</el-tag
             >
@@ -75,20 +75,20 @@
         </el-space>
         <el-space alignment="center" size="large">
           <div class="operate" style="margin-right: 18px">
-            <el-tooltip content="浏览" placement="top">
+            <el-tooltip content="浏览" placement="left">
               <el-button :icon="Search" @click="getArticle(article.id)" circle />
             </el-tooltip>
-            <el-tooltip content="编辑" placement="top">
+            <el-tooltip content="编辑" placement="bottom">
               <el-button type="primary" :icon="Edit" @click="editArticle(article.id)" circle />
             </el-tooltip>
             <el-tooltip v-if="article.isPublish === 0" content="公布" placement="top">
-              <el-button type="success" :icon="Open" circle />
+              <el-button type="success" :icon="Open" @click="publishHandle(article.id)" circle />
             </el-tooltip>
             <el-tooltip v-else content="下架" placement="top">
-              <el-button type="warning" :icon="TurnOff" circle />
+              <el-button type="warning" :icon="TurnOff" @click="privateHandle(article.id)" circle />
             </el-tooltip>
-            <el-tooltip content="删除" placement="top">
-              <el-button type="danger" :icon="Delete" circle />
+            <el-tooltip content="删除" placement="right">
+              <el-button type="danger" :icon="Delete" @click="deleteHandle(article.id)" circle />
             </el-tooltip>
           </div>
         </el-space>
@@ -99,9 +99,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import {Avatar, Check, Delete, Edit, Grid, Open, Search, TurnOff} from '@element-plus/icons-vue'
-import { getArticleByUserId } from '@/api/article'
-import {editArticle, getArticle, image} from '@/utils/publicMethods'
+import { Avatar, Delete, Edit, Grid, Open, Search, TurnOff } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import {
+  cancelPublishArticle,
+  deleteArticle,
+  getArticleByUserId,
+  publishArticle
+} from '@/api/article'
+import { editArticle, getArticle, image, lookSpace } from '@/utils/publicMethods'
 import useStore from '@/store'
 
 const store = useStore()
@@ -118,6 +124,38 @@ const queryParams = ref({
 function getArticleList() {
   getArticleByUserId(queryParams.value).then((res: any) => {
     dataList.value = res.data.records
+  })
+}
+
+// 删除文章
+function deleteHandle(id: any) {
+  ElMessageBox.confirm('确定删除文章嘛？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(() => {
+      deleteArticle({ id }).then((res: any) => {
+        ElMessage.success(res.message)
+        getArticleList()
+      })
+    })
+    .catch(() => {})
+}
+
+// 公布文章
+function publishHandle(id: any) {
+  publishArticle({ id }).then((res: any) => {
+    ElMessage.success(res.message)
+    getArticleList()
+  })
+}
+
+// 下架文章
+function privateHandle(id: any) {
+  cancelPublishArticle({ id }).then((res: any) => {
+    ElMessage.success(res.message)
+    getArticleList()
   })
 }
 

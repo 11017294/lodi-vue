@@ -28,3 +28,30 @@ export const getArticleByUserId = (query: any) => {
     params: query
   })
 }
+
+// 删除文章
+export const deleteArticle = (data: any) => {
+  return request({
+    url: `${api}/delete`,
+    method: 'delete',
+    data
+  })
+}
+
+// 发布文章
+export const publishArticle = (data: any) => {
+  return request({
+    url: `${api}/publish`,
+    method: 'post',
+    data
+  })
+}
+
+// 取消文章发布
+export const cancelPublishArticle = (data: any) => {
+  return request({
+    url: `${api}/cancelPublish`,
+    method: 'post',
+    data
+  })
+}

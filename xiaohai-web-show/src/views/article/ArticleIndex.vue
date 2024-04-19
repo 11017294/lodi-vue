@@ -11,8 +11,12 @@
               v-if="articleOne.userAvatar"
               size="default"
               :src="image(articleOne.userAvatar)"
+              style="cursor: pointer"
+              @click="lookSpace(articleOne.userId)"
             />
-            <span class="text-sm">{{ articleOne.username }}</span>
+            <span class="text-sm" @click="lookSpace(articleOne.userId)" style="cursor: pointer">
+              {{ articleOne.username }}
+            </span>
             <el-tag size="default">{{ articleOne.categoryName }}</el-tag>
             <template v-for="(item, index) in tags">
               <el-tag
@@ -119,8 +123,12 @@
             v-if="articleOne.userAvatar"
             size="small"
             :src="image(articleOne.userAvatar)"
+            style="cursor: pointer"
+            @click="lookSpace(articleOne.userId)"
           />
-          <span class="text-sm">{{ articleOne.username }}</span>
+          <span class="text-sm" @click="lookSpace(articleOne.userId)" style="cursor: pointer">
+            {{ articleOne.username }}
+          </span>
         </el-space>
       </span>
       <el-space alignment="center" size="small">
@@ -276,10 +284,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { article, articleLike, listArticles } from '@/api/show'
 import comments from '@/components/comments/index.vue'
-import { image } from '@/utils/publicMethods'
+import { image, lookSpace } from '@/utils/publicMethods'
 import { addComment, deleteComment, getCommentTree } from '@/api/comment'
 import useStore from '@/store'
-import {AxiosResponse} from "axios";
 
 // 文章详情
 const articleOne = ref({
@@ -298,6 +305,7 @@ const articleOne = ref({
   clickLike: 0,
   username: '',
   userAvatar: '',
+  userId: 0,
   tagsId: []
 })
 

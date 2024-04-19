@@ -3,7 +3,7 @@
     <h3 class="flex-center">{{ headValue }}</h3>
     <div class="publishTop">
       <div class="headProtrait">
-        <img :src="store.avatar ? store.avatar : '../static/avatar.svg'" />
+        <el-avatar :src="store.avatar ? store.avatar : '../static/avatar.svg'" />
       </div>
       <div style="width: 100%">
         <comments-input
@@ -16,11 +16,16 @@
     <h3 class="flex-center">{{ listValue }}</h3>
     <div class="dataList" v-for="(item, index) in dataList" :key="index">
       <div class="headProtrait">
-        <img :src="image(item.userAvatar)" />
+        <el-avatar
+          size="small"
+          :src="image(item.userAvatar)"
+          style="cursor: pointer"
+          @click="lookSpace(item.userId)"
+        />
       </div>
       <div class="dataListRight">
         <div class="title">
-          <h4>{{ item.username }}</h4>
+          <h4 style="cursor: pointer" @click="lookSpace(item.userId)">{{ item.username }}</h4>
           <span class="text-sm font-number text-color"> {{ item.createTime }}</span>
         </div>
         <div class="content">
@@ -44,12 +49,17 @@
 
         <div v-for="(i, k) in item.children" :key="k" class="dataList">
           <div class="headProtrait">
-            <img :src="image(i.userAvatar)" />
+            <el-avatar
+              size="small"
+              :src="image(i.userAvatar)"
+              style="cursor: pointer"
+              @click="lookSpace(i.userId)"
+            />
           </div>
           <div class="dataListRight">
             <div class="titleChild">
               <div class="title">
-                <h4>{{ i.username }}</h4>
+                <h4 style="cursor: pointer" @click="lookSpace(i.userId)">{{ i.username }}</h4>
                 <span class="text-sm font-number text-color"> {{ i.createTime }}</span>
               </div>
             </div>
@@ -85,7 +95,7 @@ import { ref, toRefs, watch } from 'vue'
 import CommentsInput from '@/components/comments/commentsInput.vue'
 import { allEmoji } from '@/components/emoji/emoji'
 import useStore from '@/store'
-import { image } from '@/utils/publicMethods'
+import { image, lookSpace } from '@/utils/publicMethods'
 
 const store = useStore()
 const placeholderValue = ref('')

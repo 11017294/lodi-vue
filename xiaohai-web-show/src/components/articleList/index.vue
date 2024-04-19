@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, toRefs } from 'vue'
 import { articleLike } from '@/api/show'
-import { getArticle, image } from '@/utils/publicMethods'
+import { getArticle, image, lookSpace } from '@/utils/publicMethods'
 import useStore from '@/store/index'
 
 const store = useStore()
@@ -117,9 +117,28 @@ watch(
           <span style="display: flex; align-items: center; justify-content: space-between">
             <span style="display: flex; align-items: center">
               <el-space size="small">
-                <el-avatar size="small" :src="image(article.userAvatar)" />
-                <span v-if="article.nickname" class="text-xs">{{ article.nickname }}</span>
-                <span v-else class="text-xs">{{ article.username }}</span>
+                <el-avatar
+                  size="small"
+                  :src="image(article.userAvatar)"
+                  style="cursor: pointer"
+                  @click="lookSpace(article.userId)"
+                />
+                <span
+                  v-if="article.nickname"
+                  class="text-xs"
+                  style="cursor: pointer"
+                  @click="lookSpace(article.userId)"
+                >
+                  {{ article.nickname }}
+                </span>
+                <span
+                  v-else
+                  class="text-xs"
+                  style="cursor: pointer"
+                  @click="lookSpace(article.userId)"
+                >
+                  {{ article.username }}
+                </span>
                 <el-tag size="small">{{ article.categoryName }}</el-tag>
                 <template v-for="(item, index) in store.tags">
                   <el-tag
@@ -206,9 +225,28 @@ watch(
           <span style="display: flex; align-items: center; justify-content: space-between">
             <span style="display: flex; align-items: center">
               <el-space size="small">
-                <el-avatar size="small" :src="image(article.userAvatar)" />
-                <span v-if="article.nickname" class="text-xs">{{ article.nickname }}</span>
-                <span v-else class="text-xs">{{ article.username }}</span>
+                <el-avatar
+                  size="small"
+                  :src="image(article.userAvatar)"
+                  style="cursor: pointer"
+                  @click="lookSpace(article.userId)"
+                />
+                <span
+                  v-if="article.nickname"
+                  class="text-xs"
+                  style="cursor: pointer"
+                  @click="lookSpace(article.userId)"
+                >
+                  {{ article.nickname }}
+                </span>
+                <span
+                  v-else
+                  class="text-xs"
+                  style="cursor: pointer"
+                  @click="lookSpace(article.userId)"
+                >
+                  {{ article.username }}
+                </span>
               </el-space>
             </span>
             <span class="text-xs font-number" @click="clickLike(article)">

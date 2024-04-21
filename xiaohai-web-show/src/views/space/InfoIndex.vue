@@ -21,9 +21,9 @@
       </el-descriptions-item>
       <el-descriptions-item label="邮件通知">
         <el-tag size="small" type="danger" v-if="userInfo.startEmailNotify === 0">关闭</el-tag>
-        <el-tag size="small" type="success" v-else-if="userInfo.startEmailNotify === 1"
-          >开启</el-tag
-        >
+        <el-tag size="small" type="success" v-else-if="userInfo.startEmailNotify === 1">
+          开启
+        </el-tag>
       </el-descriptions-item>
       <el-descriptions-item label="邮箱">{{ userInfo.email || '暂无' }}</el-descriptions-item>
       <el-descriptions-item label="简介">{{ userInfo.summary || '暂无' }}</el-descriptions-item>
@@ -48,15 +48,11 @@
         class="edit-form"
       >
         <el-form-item label="头像:" prop="userAvatar">
-          <el-upload
-            class="avatar-uploader"
-            action="h"
-            :show-file-list="false"
-            :before-upload="beforeAvatarUpload"
-          >
-            <img v-if="editUserInfo.userAvatar" :src="editUserInfo.userAvatar" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-          </el-upload>
+          <PictureCropper
+            :userInfo="editUserInfo"
+            :autoCrop="autoCrop"
+            @avatarUpload="avatarUpload"
+          />
         </el-form-item>
         <el-form-item label="昵称:" prop="nickname">
           <el-input v-model="editUserInfo.nickname"></el-input>
@@ -108,16 +104,23 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Edit, Plus } from '@element-plus/icons-vue'
+import { Edit } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
 import { getUserInfo, updateUserInfo, uploadAvatar } from '@/api/user'
 import useStore from '@/store'
+import PictureCropper from '@/components/pictureCropper/index.vue'
 
 const route = useRoute()
 const editRef = ref()
 const dialogVisible = ref(false)
 const store = useStore()
+
+// 图片裁剪大小
+const autoCrop = ref({
+  width: 200,
+  height: 200
+})
 
 const userInfo = ref({
   id: null,
@@ -148,26 +151,18 @@ function getUser() {
   const userId = route.params.id || store.userId
   getUserInfo(userId).then((res) => {
     userInfo.value = res.data
+    Object.assign(editUserInfo.value, userInfo.value)
   })
 }
 
 // 上传头像
-function beforeAvatarUpload(file: any) {
-  const fileType = file.type
-  const isImage = fileType.indexOf('image') !== -1
-  const isLt2M = file.size / 1024 / 1024 < 2
-  if (!isImage) {
-    ElMessage.error('只能上传图片格式png、jpg、gif!')
-    return
-  }
-  if (!isLt2M) {
-    ElMessage.error('只能上传图片大小小于2M')
-    return
-  }
+function avatarUpload(file: any) {
   const formParams = new FormData()
   formParams.append('file', file)
-  uploadAvatar(formParams).then((response: any) => {
-    editUserInfo.value.userAvatar = response.data
+  uploadAvatar(formParams).then((res: any) => {
+    userInfo.value.userAvatar = res.data
+    editUserInfo.value.userAvatar = res.data
+    ElMessage.success('上传成功，提交后生效')
   })
 }
 
@@ -198,8 +193,8 @@ const editUser = () => {
       return
     }
     updateUserInfo(editUserInfo.value).then(() => {
-      getUser()
       ElMessage.success('修改成功')
+      window.location.reload()
       dialogVisible.value = false
     })
   })

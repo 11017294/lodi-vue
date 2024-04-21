@@ -19,6 +19,7 @@
     "mavon-editor": "^3.0.1",
     "pinia": "^2.0.35",
     "vue": "^3.2.47",
+    "vue-cropper": "^1.1.2",
     "vue-router": "^4.1.6",
     "vuex": "^4.0.2"
   },

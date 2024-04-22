@@ -1,14 +1,8 @@
 <template>
   <div>
-    <div class="user-info-head" @click="open = true">
-      <el-avatar v-if="options.img" shape="circle" :size="120" :src="options.img" />
-      <el-avatar v-else shape="circle" :size="120"> {{ options.username }} </el-avatar>
-    </div>
-    <div></div>
     <el-dialog
-      v-model="open"
+      v-model="isShow"
       :title="title"
-      :visible.sync="open"
       width="850px"
       append-to-body
       @opened="visible = true"
@@ -33,7 +27,7 @@
           />
         </el-col>
         <el-col :xs="24" :md="12" :style="{ height: '280px' }">
-          <div class="avatar-upload-preview">
+          <div class="avatar-upload-preview" v-show="autoCrop.type">
             <img :src="previews.url" :style="previews.img" />
           </div>
         </el-col>
@@ -90,23 +84,24 @@ import { ElMessage } from 'element-plus'
 import { Minus, Plus, RefreshLeft, RefreshRight, UploadFilled } from '@element-plus/icons-vue'
 
 const props = defineProps({
-  userInfo: {
-    type: Object,
-    default: {}
+  img: {
+    type: String,
+    default: ''
   },
   autoCrop: {
     type: Object,
     default: {}
   }
 })
-const { userInfo, autoCrop } = toRefs(props)
+
+const { img, autoCrop } = toRefs(props)
 const emit = defineEmits(['avatarUpload'])
 
 const cropper = ref<InstanceType<typeof VueCropper>>()
 
 const data = reactive({
   options: {
-    img: userInfo.value.userAvatar, // 裁剪图片的地址
+    img: img.value, // 裁剪图片的地址
     outputSize: 1, // 裁剪生成图片的质量 0.1 - 1
     outputType: 'png', //	裁剪生成图片的格式 jpeg || png || webp
     autoCropWidth: autoCrop.value.width, // 默认生成截图框宽度
@@ -120,9 +115,8 @@ const data = reactive({
 })
 
 const { options } = data
-
 // 是否显示弹出层
-const open = ref(false)
+const isShow = ref(false)
 // 是否显示cropper
 const visible = ref(false)
 // 弹出层标题
@@ -164,7 +158,7 @@ function beforeUpload(file: any) {
 
 // 关闭窗口
 function closeDialog() {
-  options.img = userInfo.value.userAvatar
+  options.img = img.value
   visible.value = false
 }
 
@@ -177,38 +171,16 @@ function realTime(data) {
 function uploadImg() {
   cropper.value.getCropBlob((data) => {
     emit('avatarUpload', data)
-    open.value = false
+    isShow.value = false
   })
 }
+
+defineExpose({
+  isShow
+})
 </script>
 
 <style scoped>
-.user-info-head {
-  position: relative;
-  display: inline-block;
-  height: 120px;
-}
-
-.user-info-head:hover:after {
-  display: flex; /* 添加Flexbox布局 */
-  justify-content: center; /* 水平居中 */
-  content: '+';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  color: #eee;
-  background: rgba(0, 0, 0, 0.5);
-  font-size: 24px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  cursor: pointer;
-  line-height: 120px;
-  border-radius: 50%;
-}
-
 .avatar-upload-preview {
   position: relative;
   top: 50%;

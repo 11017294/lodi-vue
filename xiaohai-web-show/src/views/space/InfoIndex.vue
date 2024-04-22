@@ -48,8 +48,17 @@
         class="edit-form"
       >
         <el-form-item label="头像:" prop="userAvatar">
+          <div class="user-info-head" @click="childRef.isShow = true">
+            <el-avatar
+              v-show="editUserInfo.userAvatar"
+              shape="circle"
+              :size="120"
+              :src="editUserInfo.userAvatar"
+            />
+          </div>
           <PictureCropper
-            :userInfo="editUserInfo"
+            ref="childRef"
+            :img="editUserInfo.userAvatar"
             :autoCrop="autoCrop"
             @avatarUpload="avatarUpload"
           />
@@ -116,8 +125,11 @@ const editRef = ref()
 const dialogVisible = ref(false)
 const store = useStore()
 
+const childRef = ref(false)
+
 // 图片裁剪大小
 const autoCrop = ref({
+  type: 1,
   width: 200,
   height: 200
 })
@@ -204,6 +216,32 @@ getUser()
 </script>
 
 <style scoped>
+.user-info-head {
+  position: relative;
+  display: inline-block;
+  height: 120px;
+}
+
+.user-info-head:hover:after {
+  display: flex; /* 添加Flexbox布局 */
+  justify-content: center; /* 水平居中 */
+  content: '+';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  color: #eee;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 24px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: pointer;
+  line-height: 120px;
+  border-radius: 50%;
+}
+
 .edit-form {
   .avatar-uploader .avatar {
     width: 178px;

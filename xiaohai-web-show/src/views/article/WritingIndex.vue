@@ -48,6 +48,9 @@
                       placeholder="标签"
                       clearable
                       multiple
+                      collapse-tags
+                      collapse-tags-tooltip
+                      :max-collapse-tags="3"
                       @clear="form.tags = []"
                     >
                       <el-option

@@ -139,10 +139,12 @@ watch(
                 >
                   {{ article.username }}
                 </span>
-                <el-tag size="small">{{ article.categoryName }}</el-tag>
+                <el-tag size="small" v-show="article.categoryName">
+                  {{ article.categoryName }}
+                </el-tag>
                 <template v-for="(item, index) in store.tags">
                   <el-tag
-                    v-if="article.tagsId && article.tagsId.split(',').map(Number).includes(item.id)"
+                    v-if="article.tags && article.tags.includes(item.id)"
                     :key="index"
                     style="margin-right: 4px"
                     type="success"

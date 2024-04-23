@@ -33,10 +33,10 @@
                       @clear="form.categoryId = null"
                     >
                       <el-option
-                        v-for="tags in CategoryList"
-                        :key="tags.id"
-                        :label="tags.name"
-                        :value="tags.id"
+                        v-for="category in CategoryList"
+                        :key="category.id"
+                        :label="category.name"
+                        :value="category.id"
                       />
                     </el-select>
                   </el-form-item>

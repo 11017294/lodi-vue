@@ -17,10 +17,12 @@
             <span class="text-sm" @click="lookSpace(articleOne.userId)" style="cursor: pointer">
               {{ articleOne.username }}
             </span>
-            <el-tag size="default">{{ articleOne.categoryName }}</el-tag>
+            <el-tag size="default" v-show="articleOne.categoryName">
+              {{ articleOne.categoryName }}
+            </el-tag>
             <template v-for="(item, index) in tags">
               <el-tag
-                v-if="articleOne.tagsId && articleOne.tagsId.includes(item.id)"
+                v-if="articleOne.tags && articleOne.tags.includes(item.id)"
                 :key="index"
                 style="margin-right: 4px"
                 type="success"
@@ -99,10 +101,10 @@
   <!--手机端-->
   <el-card class="box-card hidden-md-and-up" shadow="hover" style="width: 100%">
     <el-space alignment="center" wrap size="small">
-      <el-tag size="small">{{ articleOne.categoryName }}</el-tag>
+      <el-tag size="small" v-show="articleOne.categoryName">{{ articleOne.categoryName }}</el-tag>
       <template v-for="(item, index) in tags">
         <el-tag
-          v-if="articleOne.tagsId && articleOne.tagsId.includes(item.id)"
+          v-if="articleOne.tags && articleOne.tags.includes(item.id)"
           :key="index"
           style="margin-right: 4px"
           type="success"
@@ -306,6 +308,7 @@ const articleOne = ref({
   username: '',
   userAvatar: '',
   userId: 0,
+  tags: [],
   tagsId: []
 })
 

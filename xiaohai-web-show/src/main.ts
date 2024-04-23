@@ -7,6 +7,7 @@ import VMdPreview from '@kangc/v-md-editor/lib/preview'
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js'
 import hljs from 'highlight.js'
 import mavonEditor from 'mavon-editor'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import App from './App.vue'
 
 // 挂载路由配置
@@ -33,7 +34,9 @@ VMdPreview.use(githubTheme, {
 const app = createApp(App)
 app.use(router)
 app.use(createPinia())
-app.use(ElementPlus)
+app.use(ElementPlus, {
+  locale: zhCn
+})
 app.component('SvgIcon', SvgIcon)
 app.use(elementIcons)
 app.use(VMdPreview)

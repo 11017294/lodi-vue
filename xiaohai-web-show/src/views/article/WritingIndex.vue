@@ -111,22 +111,18 @@
                     </el-popover>
                   </div>
                 </template>
-                <el-upload
-                  drag
-                  class="image-upload-pic"
-                  action="#"
-                  :show-file-list="false"
-                  :http-request="uploadSectionFile"
-                >
-                  <el-image
-                    v-if="form.cover"
-                    fit="cover"
-                    :src="form.cover"
-                    class="el-upload-dragger"
-                  />
-                  <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                  <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
-                </el-upload>
+                <div class="user-info-head">
+                  <el-upload
+                    class="avatar-uploader"
+                    action="h"
+                    :show-file-list="false"
+                    :http-request="requestUpload"
+                    :before-upload="uploadSectionFile"
+                  >
+                    <el-image v-if="form.cover" :src="form.cover" class="avatar" />
+                    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+                  </el-upload>
+                </div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -150,13 +146,12 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import { QuestionFilled, UploadFilled } from '@element-plus/icons-vue'
+import { Plus, QuestionFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { article, listCategory, listTag } from '@/api/show'
 import { deleteImage, uploadImage } from '@/api/file'
 import { addArticle, updateArticle } from '@/api/article'
-import router from '@/router'
 
 const title = ref('新文章')
 // const isOriginal = ref(['原创', '转载'])
@@ -165,6 +160,7 @@ const formRef = ref()
 const TagsList = ref<any[]>([])
 const CategoryList = ref<any[]>([])
 const route = useRoute()
+const router = useRouter()
 
 const rules = {
   title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
@@ -220,10 +216,10 @@ const randomImg = () => {
   //   this.$message.success(response.message);
   // });
 }
-
+// 覆盖默认的上传行为
+function requestUpload() {}
 // 上传图片
-const uploadSectionFile = (params: any) => {
-  const { file } = params
+const uploadSectionFile = (file: any) => {
   const fileType = file.type
   const isImage = fileType.indexOf('image') !== -1
   const isLt2M = file.size / 1024 / 1024 < 2
@@ -289,4 +285,36 @@ getArticle()
 getCategory()
 getTags()
 </script>
-<style scoped></style>
+<style scoped>
+.user-info-head {
+  position: relative;
+  display: inline-block;
+  width: 238px;
+  height: 140px;
+  border: 1px dashed #c0ccda;
+}
+
+.avatar-uploader-icon {
+  width: 238px;
+  height: 140px;
+}
+
+.user-info-head .avatar:hover:after {
+  display: flex; /* 添加Flexbox布局 */
+  justify-content: center; /* 水平居中 */
+  content: '+';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  color: #eee;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 24px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: pointer;
+  line-height: 140px;
+}
+</style>

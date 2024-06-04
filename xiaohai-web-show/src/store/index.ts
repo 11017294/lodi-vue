@@ -38,7 +38,7 @@ const useStore = defineStore('user', {
               ElMessage.error(message)
               return
             }
-            this.token = data
+            this.token = data.tokenValue
             setToken(data)
             resolve('')
           })

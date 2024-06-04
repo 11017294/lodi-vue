@@ -2,7 +2,7 @@ import Axios from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
 // import { useStore } from 'vuex'
 import useStore from '@/store/index'
-import { getToken } from '@/utils/auth'
+import { getToken, getTokenName } from '@/utils/auth'
 import router from '@/router'
 
 const axios = Axios.create({
@@ -18,7 +18,7 @@ axios.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      newResponse.headers.authorization = getToken()
+      newResponse.headers[getTokenName()] = getToken()
     }
     /**
      * 根据你的项目实际情况来对 config 做处理
@@ -30,7 +30,7 @@ axios.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-
+let messageBoxFlag = 0 // 默认 MessageBox 未打开
 // 后置拦截器（获取到响应时的拦截）
 axios.interceptors.response.use(
   (response) => {
@@ -42,19 +42,26 @@ axios.interceptors.response.use(
 
     // 登录异常
     if (res.code === 401) {
-      ElMessageBox.confirm('继续使用，请重新登录', '提示', {
-        confirmButtonText: '去登陆',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          window.open(`/login?show=${router.currentRoute.value.fullPath}`, '_self')
+      // 防止弹出多次
+      if (messageBoxFlag === 0) {
+        messageBoxFlag = 1 // 修改标记，打开 MessageBox
+        ElMessageBox.confirm('继续使用，请重新登录', '提示', {
+          confirmButtonText: '去登陆',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
-        .catch(() => {})
-      const store = useStore()
-      store.resetToken().then(() => {
-        // window.location.reload()
-      })
+          .then(() => {
+            messageBoxFlag = 0
+            window.open(`/login?show=${router.currentRoute.value.fullPath}`, '_self')
+          })
+          .catch(() => {
+            messageBoxFlag = 0
+          })
+        const store = useStore()
+        store.resetToken().then(() => {
+          // window.location.reload()
+        })
+      }
     }
     if (res.code !== 0) {
       ElMessage.error(res.message || 'Error')

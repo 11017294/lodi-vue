@@ -56,6 +56,7 @@ function getList() {
     const a = Math.ceil(total.value / queryParams.value.pageSize)
     loadMores.value = queryParams.value.currentPage + 1 <= a
   })
+  selectedButton.value = null
 }
 
 function getListByCategoryId(id: any) {

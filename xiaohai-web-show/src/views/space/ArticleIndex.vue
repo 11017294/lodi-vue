@@ -2,7 +2,6 @@
   <el-space class="hidden-sm-and-down" direction="vertical" fill size="large" style="display: flex">
     <el-card
       :body-style="{ padding: '0px' }"
-      v-loading="loading"
       v-for="article in dataList"
       :key="article"
       class="box-card box-card-hover"
@@ -98,6 +97,11 @@
         </el-space>
       </div>
     </el-card>
+    <div class="pagination-wrapper">
+      <el-button v-if="loading" text type="primary" bg disabled>正在加载...</el-button>
+      <el-button v-else-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
+      <el-button v-else text disabled>没有更多了</el-button>
+    </div>
   </el-space>
 </template>
 
@@ -117,10 +121,15 @@ import useStore from '@/store'
 import { getUserInfo } from '@/api/user'
 
 const store = useStore()
-
-const loading = ref()
-const dataList = ref({})
 const route = useRoute()
+// 展示文章列表
+const dataList: any = ref([])
+// 正在加载
+const loading = ref(true)
+// 是否展示加载更多
+const loadMores = ref(true)
+// 总数
+const total = ref()
 
 const queryParams = ref({
   currentPage: 1,
@@ -130,9 +139,36 @@ const queryParams = ref({
 
 // 获取文章列表
 function getArticleList() {
-  getArticleByUserId(queryParams.value).then((res: any) => {
-    dataList.value = res.data.records
-  })
+  queryParams.value.currentPage = 1
+  getArticleByUserId(queryParams.value)
+    .then((res: any) => {
+      dataList.value = res.data.records
+      total.value = res.data.total
+      const a = Math.ceil(total.value / queryParams.value.pageSize)
+      loadMores.value = queryParams.value.currentPage + 1 <= a
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+// 加载更多
+function loadMore() {
+  const a = Math.ceil(total.value / queryParams.value.pageSize)
+  if (queryParams.value.currentPage + 1 >= a) {
+    loadMores.value = false // 没有更多了
+  }
+  loading.value = true // 加载中
+  if (queryParams.value.currentPage + 1 <= a) {
+    queryParams.value.currentPage = 1 + queryParams.value.currentPage
+    getArticleByUserId(queryParams.value)
+      .then((response) => {
+        dataList.value = [...dataList.value, ...response.data.records]
+      })
+      .finally(() => {
+        loading.value = false // 加载完成
+      })
+  }
 }
 
 // 获取用户信息
@@ -198,5 +234,11 @@ getUser()
 .box-card-hover:hover {
   filter: drop-shadow(0 0 0.5em rgb(252, 191, 191));
   transform: scale(1.01);
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  margin-top: 20px; /* 根据需要调整间距 */
 }
 </style>

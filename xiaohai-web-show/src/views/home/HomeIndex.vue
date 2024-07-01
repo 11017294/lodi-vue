@@ -15,6 +15,8 @@ const carouselList: any = ref([])
 const dataList: any = ref([])
 // 总数
 const total = ref()
+// 正在加载
+const loading = ref(true)
 // 是否展示加载更多
 const loadMores = ref(true)
 // 是否展开分类
@@ -30,18 +32,20 @@ const data = reactive({
     currentPage: 1,
     pageSize: 10,
     categoryId: null
+  },
+  carouselParams: {
+    currentPage: 1,
+    pageSize: 5
   }
 })
 
-const { queryParams } = toRefs(data)
+const { queryParams, carouselParams } = toRefs(data)
 
 /**
  * 轮播
  */
 function getCarouselList() {
-  queryParams.value.currentPage = 1
-  queryParams.value.pageSize = 5
-  listArticles(queryParams.value).then((response) => {
+  listArticles(carouselParams.value).then((response) => {
     carouselList.value = response.data.records
   })
 }
@@ -49,20 +53,22 @@ function getCarouselList() {
 /** 查询展示文章列表 */
 function getList() {
   queryParams.value.currentPage = 1
-  queryParams.value.pageSize = 10
-  listArticles(queryParams.value).then((response) => {
-    dataList.value = response.data.records
-    total.value = response.data.total
-    const a = Math.ceil(total.value / queryParams.value.pageSize)
-    loadMores.value = queryParams.value.currentPage + 1 <= a
-  })
+  listArticles(queryParams.value)
+    .then((response) => {
+      dataList.value = response.data.records
+      total.value = response.data.total
+      const a = Math.ceil(total.value / queryParams.value.pageSize)
+      loadMores.value = queryParams.value.currentPage + 1 <= a
+    })
+    .finally(() => {
+      loading.value = false
+    })
   selectedButton.value = null
 }
 
 function getListByCategoryId(id: any) {
   queryParams.value.categoryId = id
   queryParams.value.currentPage = 1
-  queryParams.value.pageSize = 10
   getArticleByCategoryId(queryParams.value).then((response) => {
     dataList.value = response.data.records
     total.value = response.data.total
@@ -78,13 +84,18 @@ function getListByCategoryId(id: any) {
 function loadMore() {
   const a = Math.ceil(total.value / queryParams.value.pageSize)
   if (queryParams.value.currentPage + 1 >= a) {
-    loadMores.value = false
+    loadMores.value = false // 没有更多了
   }
+  loading.value = true // 加载中
   if (queryParams.value.currentPage + 1 <= a) {
     queryParams.value.currentPage = 1 + queryParams.value.currentPage
-    listArticles(queryParams.value).then((response) => {
-      dataList.value = [...dataList.value, ...response.data.records]
-    })
+    listArticles(queryParams.value)
+      .then((response) => {
+        dataList.value = [...dataList.value, ...response.data.records]
+      })
+      .finally(() => {
+        loading.value = false // 加载完成
+      })
   }
 }
 function classification() {
@@ -157,7 +168,8 @@ getCarouselList()
         </div>
       </el-card>
       <articleList :dataList="dataList"></articleList>
-      <el-button v-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
+      <el-button v-if="loading" text type="primary" bg disabled>正在加载...</el-button>
+      <el-button v-else-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
       <el-button v-else text disabled>没有更多了</el-button>
     </el-space>
   </el-col>
@@ -214,7 +226,8 @@ getCarouselList()
       </div>
     </el-card>
     <articleList :dataList="dataList"></articleList>
-    <el-button v-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
+    <el-button v-if="loading" text type="primary" bg disabled>正在加载...</el-button>
+    <el-button v-else-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
     <el-button v-else text disabled>没有更多了</el-button>
   </el-space>
   <!--右内容区-->

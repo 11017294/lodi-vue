@@ -164,6 +164,7 @@ const TagsList = ref<any[]>([])
 const CategoryList = ref<any[]>([])
 const route = useRoute()
 const router = useRouter()
+const md = ref(null)
 
 const rules = {
   title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
@@ -246,15 +247,15 @@ const imgAdd = (pos: any, $file: any) => {
   const data = new FormData()
   data.append('file', $file)
   uploadImage(data).then((response: any) => {
-    // this.$refs.md.$img2Url(pos, response.data);
+    if (md.value) {
+      md.value.$img2Url(pos, response.data)
+    }
   })
 }
 
 // 删除图片
 const imgDel = (filename: any) => {
-  const name = filename[0].split('/')
-  const fileName = name[name.length - 1]
-  deleteImage(fileName).then(() => {})
+  deleteImage(filename[0]).then(() => {})
 }
 
 // 提交表单

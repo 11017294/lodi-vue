@@ -29,6 +29,13 @@ export function getArticle(id: any) {
 }
 
 /**
+ * 跳转到留言板
+ */
+export function lookMessage() {
+  return router.push({ path: '/message' })
+}
+
+/**
  * 根据文章id跳转到编辑文章页
  * @param id
  */
@@ -36,12 +43,18 @@ export function editArticle(id: any) {
   return router.push({ path: `/edit/article/${id}` })
 }
 
-// 查看个人空间
+/**
+ * 查看个人空间
+ * @param id
+ */
 export function lookSpace(id: any) {
   return router.push({ path: `/show/space/${id}` })
 }
 
-// 获取url参数
+/**
+ * 获取url参数
+ * @param variable
+ */
 export function getQueryVariable(variable: any) {
   const query = window.location.search.substring(1)
   const vars = query.split('&')

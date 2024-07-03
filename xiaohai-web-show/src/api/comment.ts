@@ -2,6 +2,15 @@ import request from '@/utils/axios'
 
 const api = '/comment'
 
+// 获取登录用户评论
+export const getCommentByCurrentUser = (data: any) => {
+  return request({
+    url: `${api}/getCommentByCurrentUser`,
+    method: 'get',
+    params: data
+  })
+}
+
 // 获取评论
 export const getCommentTree = (data: any) => {
   return request({

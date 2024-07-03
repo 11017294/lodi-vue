@@ -12,7 +12,7 @@
         <el-tabs tab-position="bottom" v-model="activeName">
           <el-tab-pane label="文章" :name="tabName.article"></el-tab-pane>
           <el-tab-pane label="收藏" :name="tabName.collect"></el-tab-pane>
-          <el-tab-pane label="评论" :name="tabName.comment"></el-tab-pane>
+          <el-tab-pane label="评论" :name="tabName.comment" v-if="isShow"></el-tab-pane>
           <el-tab-pane label="个人资料" :name="tabName.info"></el-tab-pane>
         </el-tabs>
       </div>
@@ -24,7 +24,7 @@
       <template v-else-if="tabName.collect == activeName">
         <CollectIndex />
       </template>
-      <template v-else-if="tabName.comment == activeName">
+      <template v-else-if="tabName.comment == activeName && isShow">
         <CommentIndex />
       </template>
       <template v-else-if="tabName.info == activeName">
@@ -55,10 +55,14 @@ const tabName = ref({
 const route = useRoute()
 const userInfo = ref({})
 const activeName = ref(tabName.value.info)
+const isShow = ref(false)
 
 // 获取用户信息
 function getUser() {
   const userId = route.params.id || store.userId
+  if (!route.params.id) {
+    isShow.value = true
+  }
   getUserInfo(userId).then((res) => {
     userInfo.value = res.data
   })

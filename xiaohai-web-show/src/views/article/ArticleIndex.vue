@@ -448,8 +448,8 @@ function getListComment() {
   getCommentTree(commentQueryParams.value)
     .then((res) => {
       commentCount.value = res.data.total
-      const a = Math.ceil(commentCount.value / queryParams.value.pageSize)
-      loadMores.value = queryParams.value.currentPage + 1 <= a
+      const a = Math.ceil(commentCount.value / commentQueryParams.value.pageSize)
+      loadMores.value = commentQueryParams.value.currentPage + 1 <= a
       const array = res.data.records
       for (let i = 0; i < array.length; i++) {
         ;(array[i] as any).replyInputShow = false

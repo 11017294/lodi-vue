@@ -75,6 +75,7 @@ function loadMore() {
 
 // 获取评论
 function getListComment() {
+  queryParams.value.currentPage = 1
   getCommentTree(queryParams.value).then((res) => {
     commentCount.value = res.data.total
     const a = Math.ceil(commentCount.value / queryParams.value.pageSize)

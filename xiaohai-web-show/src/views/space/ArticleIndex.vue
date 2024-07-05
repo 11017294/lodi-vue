@@ -158,9 +158,9 @@ function loadMore() {
   if (queryParams.value.currentPage + 1 >= a) {
     loadMores.value = false // 没有更多了
   }
-  loading.value = true // 加载中
   if (queryParams.value.currentPage + 1 <= a) {
     queryParams.value.currentPage = 1 + queryParams.value.currentPage
+    loading.value = true // 加载中
     getArticleByUserId(queryParams.value)
       .then((response) => {
         dataList.value = [...dataList.value, ...response.data.records]

@@ -93,7 +93,10 @@
         size="large"
         style="display: flex"
       >
-        <el-button v-if="loadMores" text type="primary" bg @click="loadMore">加载更多</el-button>
+        <el-button v-if="loading" text type="primary" bg disabled>正在加载...</el-button>
+        <el-button v-else-if="loadMores" text type="primary" bg @click="loadMore"
+          >加载更多</el-button
+        >
         <el-button v-else text disabled>没有更多了</el-button>
       </el-space>
     </el-card>
@@ -323,6 +326,8 @@ const { tags } = store
 const dataList = ref([])
 // 评论数
 const commentCount = ref()
+// 正在加载
+const loading = ref(true)
 // 是否展示加载更多
 const loadMores = ref(true)
 
@@ -423,27 +428,38 @@ function loadMore() {
   if (commentQueryParams.value.currentPage + 1 >= a) {
     loadMores.value = false
   }
+
   if (commentQueryParams.value.currentPage + 1 <= a) {
     commentQueryParams.value.currentPage = 1 + commentQueryParams.value.currentPage
-    getCommentTree(commentQueryParams.value).then((res) => {
-      config.value.dataList = [...config.value.dataList, ...(res.data.records as [])]
-    })
+    loading.value = true // 加载中
+    getCommentTree(commentQueryParams.value)
+      .then((res) => {
+        config.value.dataList = [...config.value.dataList, ...(res.data.records as [])]
+      })
+      .finally(() => {
+        loading.value = false // 加载完成
+      })
   }
 }
 
 // 获取评论
 function getListComment() {
-  getCommentTree(commentQueryParams.value).then((res) => {
-    commentCount.value = res.data.total
-    const a = Math.ceil(commentCount.value / queryParams.value.pageSize)
-    loadMores.value = queryParams.value.currentPage + 1 <= a
-    const array = res.data.records
-    for (let i = 0; i < array.length; i++) {
-      ;(array[i] as any).replyInputShow = false
-    }
-    config.value.dataList = array
-    config.value.disabled = true
-  })
+  commentQueryParams.value.currentPage = 1
+  getCommentTree(commentQueryParams.value)
+    .then((res) => {
+      commentCount.value = res.data.total
+      const a = Math.ceil(commentCount.value / queryParams.value.pageSize)
+      loadMores.value = queryParams.value.currentPage + 1 <= a
+      const array = res.data.records
+      for (let i = 0; i < array.length; i++) {
+        ;(array[i] as any).replyInputShow = false
+      }
+      config.value.dataList = array
+      config.value.disabled = true
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 // 评论
